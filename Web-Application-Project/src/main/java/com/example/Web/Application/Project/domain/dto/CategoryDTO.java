@@ -2,8 +2,7 @@ package com.example.Web.Application.Project.domain.dto;
 
 import java.util.List;
 
-import com.example.Web.Application.Project.domain.entities.Score;
-import com.example.Web.Application.Project.domain.enums.UserRole;
+import com.example.Web.Application.Project.domain.entities.Word;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -22,15 +21,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserDTO {
+public class CategoryDTO {
     
-
-   
-  private Long id;
-  private String username;
-  private String password;
-  private String email;
-  private String fullName;
-  private UserRole role;
-  private List<Score> scores;
+     
+                private Long id;
+                private String name;
+                private String description;
 }

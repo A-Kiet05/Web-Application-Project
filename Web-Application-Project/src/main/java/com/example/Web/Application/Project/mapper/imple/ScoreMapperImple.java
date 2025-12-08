@@ -9,6 +9,7 @@ import com.example.Web.Application.Project.domain.entities.Score;
 
 import com.example.Web.Application.Project.mapper.Mapper;
 
+@Component
 public class ScoreMapperImple implements Mapper<Score, ScoreDTO>{
     
 

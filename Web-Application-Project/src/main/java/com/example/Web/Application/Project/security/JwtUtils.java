@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.example.Web.Application.Project.config.EnvLoader;
 import com.example.Web.Application.Project.domain.entities.User;
 
 import io.jsonwebtoken.Claims;
@@ -26,12 +27,11 @@ public class JwtUtils {
 
     private SecretKey key ;
 
-    @Value("${secreteJwtString}")
-    private String secreteJwtString;
+   private String secretJwtString = EnvLoader.dotenv.get("SECRET_KEY");
 
     @PostConstruct
     private void init(){
-        byte[] keyBytes= secreteJwtString.getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes= secretJwtString.getBytes(StandardCharsets.UTF_8);
         this.key = new SecretKeySpec(keyBytes , "HmacSHA256");
     }
 

@@ -2,8 +2,7 @@ package com.example.Web.Application.Project.domain.dto;
 
 import java.util.List;
 
-import com.example.Web.Application.Project.domain.entities.Score;
-import com.example.Web.Application.Project.domain.enums.UserRole;
+import com.example.Web.Application.Project.domain.entities.UserAchievement;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,21 +15,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserDTO {
+public class AchievementDTO {
     
 
    
-  private Long id;
-  private String username;
-  private String password;
-  private String email;
-  private String fullName;
-  private UserRole role;
-  private List<Score> scores;
+            private Long id;
+            private String code;
+            private String name;
+            private String description;
+            private String condition; // ex: "WPM_50", "ACCURACY_95"
 }

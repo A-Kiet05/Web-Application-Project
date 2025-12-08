@@ -46,4 +46,16 @@ public class User {
 
   @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
   private List<Score> scores;
+
+  @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+  private List<GameSession> gameSessions;
+
+  @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+  private List<UserAchievement> userAchievements;
+
+  @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+  private List<UserWord> userWords; 
+
+  @OneToOne(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
+  private UserStats userStats;
 }

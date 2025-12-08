@@ -1,7 +1,9 @@
 package com.example.Web.Application.Project.service.interf;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import com.example.Web.Application.Project.domain.dto.CategoryDTO;
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.WordDTO;
 import com.example.Web.Application.Project.domain.entities.Word;
@@ -13,5 +15,7 @@ public interface WordService {
     Response getWordById(Long wordId);
     Response getRandomWordInRange(int limit);
     Response deleteWord(Long wordId);
+    Response getAllWordByCategories(String categoryName );
+   
 
 }

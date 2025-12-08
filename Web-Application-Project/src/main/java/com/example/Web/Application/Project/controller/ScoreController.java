@@ -17,7 +17,7 @@ import com.example.Web.Application.Project.service.interf.ScoreService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/words")
+@RequestMapping("/scores")
 @RequiredArgsConstructor
 public class ScoreController {
     private final ScoreService scoreService;

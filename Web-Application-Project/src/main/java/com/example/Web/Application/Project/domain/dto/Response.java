@@ -8,9 +8,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale.Category;
 
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
+import com.example.Web.Application.Project.domain.entities.Achievement;
 import com.example.Web.Application.Project.domain.entities.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -43,6 +45,22 @@ public class Response {
 
     private WordDTO wordDTO;
     private List<WordDTO> wordDTOs;
+
+    private CategoryDTO category;
+    private List<CategoryDTO> categoryDTOs;
+   
+    private GameSessionDTO gameSessionDTO;
+    private List<SessionRequest> sessionRequests;
+
+   private UserWordDTO userWordDTO;
+   private List<UserWordDTO> userWordDTOs;
+
+   private AchievementDTO achievement;
+   private List<AchievementDTO> achievementDTOs;
+
+   private UserAchievementResponse userAchievementResponse;
+   private List<UserAchievementResponse> userAchievementResponses;
+
 
     
 }
