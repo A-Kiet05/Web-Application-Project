@@ -20,9 +20,9 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserStatsDTO {
     
-    private Long id;
-    private Long userId;
-    private Integer totalWordsTyped;
-    private Integer bestWpm;
-    private Double averageAccuracy;
+        private Long id;
+        private Long userId;
+        private Integer totalWordsTyped;
+        private Integer bestWpm;
+        private Double averageAccuracy;
 }

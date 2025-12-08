@@ -33,6 +33,6 @@ public class UserAchievementResponse {
         private Long id;
         private Long userId;
         private Long achievementId;
-        private  LocalDateTime unlockedAt;
+        private LocalDateTime unlockedAt;
 
 }

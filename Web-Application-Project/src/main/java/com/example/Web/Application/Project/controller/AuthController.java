@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.LoginRequest;
+import com.example.Web.Application.Project.domain.dto.RegisterRequest;
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.UserDTO;
 import com.example.Web.Application.Project.service.interf.UserService;
@@ -24,8 +25,8 @@ public class AuthController{
      private final UserService userService;
      
      @PostMapping("/register")
-     public ResponseEntity<Response> registryUser(@RequestBody UserDTO userDTO){
-            return ResponseEntity.ok(userService.registryUser(userDTO));
+     public ResponseEntity<Response> registryUser(@RequestBody RegisterRequest registerRequest){
+            return ResponseEntity.ok(userService.registryUser(registerRequest));
      }
 
      @GetMapping("/login")

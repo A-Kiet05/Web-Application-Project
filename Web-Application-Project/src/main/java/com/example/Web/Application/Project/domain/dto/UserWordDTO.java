@@ -23,7 +23,7 @@ public class UserWordDTO {
 
     
         private Long id;
-        private UserDTO user;
-        private WordDTO word;
+        private Long userId;
+        private Long wordId;
         private int errorCount;
 }

@@ -35,7 +35,8 @@ public class ScoreServiceImple implements ScoreService{
     @Override
     public Response postScore(ScoreDTO scoreDTO){
          
-        User user = userRepository.findByEmail(scoreDTO.getUser().getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
+        User user = userRepository.findByEmail(scoreDTO.getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
+
         Score score = new Score();
         score.setScore(scoreDTO.getScore());
         score.setUser(user);

@@ -32,8 +32,5 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
-    @GetMapping("/Get-user-info")
-    public ResponseEntity<Response> getUserInfo(){
-        return ResponseEntity.ok(userService.getUserInfoAndOrderHistory());
-    }
+   
 }

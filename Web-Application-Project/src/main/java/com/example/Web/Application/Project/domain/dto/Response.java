@@ -14,6 +14,7 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 
 import com.example.Web.Application.Project.domain.entities.Achievement;
 import com.example.Web.Application.Project.domain.entities.User;
+import com.example.Web.Application.Project.domain.entities.UserStats;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -49,8 +50,8 @@ public class Response {
     private CategoryDTO category;
     private List<CategoryDTO> categoryDTOs;
    
-    private GameSessionDTO gameSessionDTO;
-    private List<SessionRequest> sessionRequests;
+    private SessionResponse sessionResponse;
+    private List<SessionResponse> sessionResponses;
 
    private UserWordDTO userWordDTO;
    private List<UserWordDTO> userWordDTOs;
@@ -60,7 +61,9 @@ public class Response {
 
    private UserAchievementResponse userAchievementResponse;
    private List<UserAchievementResponse> userAchievementResponses;
-
+   
+   private UserStatsDTO userStatsDTO;
+   private List<UserStatsDTO> userStatsDTOs;
 
     
 }

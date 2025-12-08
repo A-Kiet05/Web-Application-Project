@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.Web.Application.Project.domain.dto.LoginRequest;
+import com.example.Web.Application.Project.domain.dto.RegisterRequest;
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.UserDTO;
 import com.example.Web.Application.Project.domain.entities.User;
@@ -34,7 +35,7 @@ public class UserServiceImple implements UserService{
 
     
     @Override
-    public Response registryUser(UserDTO registrationRequest){
+    public Response registryUser(RegisterRequest registrationRequest){
         
         UserRole role = UserRole.USER;
         
@@ -106,14 +107,7 @@ public class UserServiceImple implements UserService{
     }
 
 
-    @Override
-    public Response getUserInfoAndOrderHistory(){
-       
-        User user = getLogin();
-        UserDTO userDTO = userMapper.mapTo(user);
-
-        return Response.builder().status(200).user(userDTO).build();
-    }
+   
    
 
 }

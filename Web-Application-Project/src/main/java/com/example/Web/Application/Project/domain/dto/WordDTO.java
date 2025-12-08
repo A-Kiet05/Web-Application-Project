@@ -1,6 +1,8 @@
 package com.example.Web.Application.Project.domain.dto;
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -21,4 +23,6 @@ public class WordDTO {
 
    private Long id;
    private String word;
+   private Long categoryId;
+   private List<UserWordDTO> userWordDTOs;
 }

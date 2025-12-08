@@ -6,9 +6,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.Web.Application.Project.domain.dto.GameSessionDTO;
+
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.SessionRequest;
+import com.example.Web.Application.Project.domain.dto.SessionResponse;
 import com.example.Web.Application.Project.domain.entities.GameSession;
 import com.example.Web.Application.Project.domain.entities.User;
 import com.example.Web.Application.Project.exception.NotFoundException;
@@ -25,13 +26,14 @@ public class GameSessionServiceImple implements GameSessionService {
 
     private final GameSessionRepository sessionRepository;
     private final UserRepository userRepository;
-    private final Mapper<GameSession, SessionRequest> sessionMapper;
+    private final Mapper<GameSession, SessionResponse> sessionMapper;
 
     @Override
     public Response saveSession(SessionRequest sessionRequest) {
 
-        User user = userRepository.findById(sessionRequest.getUser().getId())
+        User user = userRepository.findById(sessionRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found!"));
+        
 
         GameSession session = new GameSession();
         session.setUser(user);
@@ -56,14 +58,18 @@ public class GameSessionServiceImple implements GameSessionService {
     @Override
     public Response getSessionsByUser(Long userId) {
 
-        List<SessionRequest> sessionRequests = sessionRepository.findByUserId(userId)
+        List<SessionResponse> sessionsResponses = sessionRepository.findByUserId(userId)
                 .stream()
                 .map(sessionMapper::mapTo)
                 .collect(Collectors.toList());
 
-        return Response.builder()
-                .status(200)
-                .sessionRequests(sessionRequests)
-                .build();
+        if(sessionsResponses == null){
+                throw new NotFoundException("userId not found !");
+        }
+
+         return Response.builder()
+                        .status(200)
+                        .sessionResponses(sessionsResponses)
+                        .build();
     }
 }
