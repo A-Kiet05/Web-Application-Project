@@ -31,4 +31,5 @@ public class AchievementDTO {
             private String name;
             private String description;
             private String condition; // ex: "WPM_50", "ACCURACY_95"
+            private List<UserAchievementResponse> userAchievements;
 }

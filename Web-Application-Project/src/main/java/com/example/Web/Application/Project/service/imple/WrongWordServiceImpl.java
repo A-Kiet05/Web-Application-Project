@@ -10,10 +10,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.UserWordDTO;
+import com.example.Web.Application.Project.domain.entities.User;
 import com.example.Web.Application.Project.domain.entities.UserWord;
+import com.example.Web.Application.Project.domain.entities.Word;
 import com.example.Web.Application.Project.exception.NotFoundException;
 import com.example.Web.Application.Project.mapper.Mapper;
+import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.repository.UserWordRepository;
+import com.example.Web.Application.Project.repository.WordRepository;
 import com.example.Web.Application.Project.service.interf.WrongWordService;
 
 import java.time.LocalDateTime;
@@ -27,11 +31,26 @@ public class WrongWordServiceImpl implements WrongWordService {
 
     private final UserWordRepository wrongWordRepository;
     private final Mapper<UserWord , UserWordDTO> wrongMapper;
+    private final UserRepository userRepository;
+    private final WordRepository wordRepository;
 
     @Override
     public Response recordWrongWord(Long userId, Long wordId) {
+        
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-        UserWord wrong = wrongWordRepository.findByUserIdAndWordId(userId, wordId).orElseThrow(() -> new NotFoundException("user id or word id not found!"));
+        Word word = wordRepository.findById(wordId)
+                .orElseThrow(() -> new NotFoundException("Word not found"));
+
+        UserWord wrong = wrongWordRepository.findByUserIdAndWordId(userId, wordId)
+        .orElse(
+                UserWord.builder()
+                        .user(user)
+                        .word(word)
+                        .errorCount(0)
+                        .build()
+        );
         
        
         wrong.setErrorCount(wrong.getErrorCount() + 1);
@@ -73,8 +92,8 @@ public class WrongWordServiceImpl implements WrongWordService {
     @Override
     public Response clearUserWrongWords(Long userId) {
 
-        wrongWordRepository.findAllByUserId(userId)
-                .forEach(item -> wrongWordRepository.deleteById(item.getId()));
+        List<UserWord> wrongWords = wrongWordRepository.findAllByUserId(userId);
+                wrongWords.forEach(word -> wrongWordRepository.deleteById(word.getId()));
 
 
                 return Response.builder()

@@ -1,6 +1,9 @@
 package com.example.Web.Application.Project.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,10 +12,11 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "user_achievement")
-@Getter
-@Setter
+@Table(name = "user_achievement" ,  uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "achievement_id"}))
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class UserAchievement {
 
         @Id
@@ -21,12 +25,12 @@ public class UserAchievement {
 
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id" , unique = true)
+        @JoinColumn(name = "user_id" )
         private User user;
 
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "achievement_id" , unique = true)
+        @JoinColumn(name = "achievement_id" )
         private Achievement achievement;
 
         @Column(name = "unlockedAt" , nullable = false)

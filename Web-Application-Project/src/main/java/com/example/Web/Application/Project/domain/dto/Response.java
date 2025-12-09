@@ -41,8 +41,8 @@ public class Response {
     private UserDTO user;
     private List<UserDTO> userDTOs;
 
-    private ScoreDTO scoreDTO;
-    private List<ScoreDTO> scoreDTOs;
+    private ScoreResponse scoreDTO;
+    private List<ScoreResponse> scoreDTOs;
 
     private WordDTO wordDTO;
     private List<WordDTO> wordDTOs;

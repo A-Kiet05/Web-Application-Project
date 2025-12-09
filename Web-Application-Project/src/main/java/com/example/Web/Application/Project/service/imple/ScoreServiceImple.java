@@ -9,7 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.domain.dto.ScoreDTO;
+import com.example.Web.Application.Project.domain.dto.ScoreRequest;
+import com.example.Web.Application.Project.domain.dto.ScoreResponse;
 import com.example.Web.Application.Project.domain.entities.Score;
 import com.example.Web.Application.Project.domain.entities.User;
 import com.example.Web.Application.Project.exception.NotFoundException;
@@ -29,16 +30,35 @@ public class ScoreServiceImple implements ScoreService{
     
     private final ScoreRepository scoreRepository;
     private final UserService userService;
-    private final Mapper<Score , ScoreDTO> scoreMapper;
+    private final Mapper<Score , ScoreResponse> scoreMapper;
     private final UserRepository userRepository;
 
     @Override
-    public Response postScore(ScoreDTO scoreDTO){
+    public Response postScore(ScoreRequest scoreRequest){
          
-        User user = userRepository.findByEmail(scoreDTO.getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
+        User user = userRepository.findByEmail(scoreRequest.getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
 
+       //===== Calculate score============
+        String typed = scoreRequest.getTypedText().trim();
+        String original = scoreRequest.getOriginalText().trim();
+
+        String[] typedArr = typed.split("\\s+");
+        String[] originalArr = original.split("\\s+");
+
+        int totalWords = originalArr.length;
+        int correct = 0;
+
+        for (int i = 0; i < typedArr.length; i++) {
+            if (i < totalWords && typedArr[i].equals(originalArr[i])) {
+                correct++;
+            }
+        }
+
+        int finalScore = (int) (((double) correct / totalWords) * 100);
+
+        //=========================
         Score score = new Score();
-        score.setScore(scoreDTO.getScore());
+        score.setScore(finalScore);
         score.setUser(user);
 
         scoreRepository.save(score);
@@ -54,7 +74,7 @@ public class ScoreServiceImple implements ScoreService{
      @Override
     public Response getAllScore(){
           
-        List<ScoreDTO> scoreDTOs = scoreRepository.findAll(Sort.by(Sort.Direction.DESC , "id"))
+        List<ScoreResponse> scoreDTOs = scoreRepository.findAll(Sort.by(Sort.Direction.DESC , "id"))
                                                   .stream()
                                                   .map(scoreMapper::mapTo)
                                                   .collect(Collectors.toList());
@@ -69,7 +89,7 @@ public class ScoreServiceImple implements ScoreService{
     public Response leaderBoard(int top ,Pageable pageable ){
             
         List<Score> scores = scoreRepository.findTopScores(PageRequest.of(0, top));
-        List<ScoreDTO> scoreDTOs = scores.stream().map(scoreMapper::mapTo).collect(Collectors.toList());
+        List<ScoreResponse> scoreDTOs = scores.stream().map(scoreMapper::mapTo).collect(Collectors.toList());
 
         return Response.builder()
                        .status(200)

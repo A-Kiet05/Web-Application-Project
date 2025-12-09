@@ -23,11 +23,7 @@ public class SessionRequest {
     
         private Long userId;
         private int duration;
-        private int wordsTyped;
-        private int correctWords;
-        private int incorrectWords;
-        private double rawWpm;
-        private double wpm;
-        private double accuracy;
+        private String typedText;
+        private String originalText;
         private Mode mode;
 }

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.domain.dto.ScoreDTO;
+import com.example.Web.Application.Project.domain.dto.ScoreRequest;
+import com.example.Web.Application.Project.domain.dto.ScoreResponse;
 import com.example.Web.Application.Project.service.interf.ScoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class ScoreController {
     private final ScoreService scoreService;
 
     @PostMapping("/post-score")
-    public ResponseEntity<Response> postScore(@RequestBody ScoreDTO scoreDTO){
-        return ResponseEntity.ok(scoreService.postScore(scoreDTO));
+    public ResponseEntity<Response> postScore(@RequestBody ScoreRequest scoreRequest){
+        return ResponseEntity.ok(scoreService.postScore(scoreRequest));
     }
 
     @GetMapping("/all")

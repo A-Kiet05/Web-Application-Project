@@ -25,12 +25,12 @@ public class UserWord {
 
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "user_id" , unique = true)
+        @JoinColumn(name = "user_id" )
         private User user;
 
 
         @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "word_id" , unique = true)
+        @JoinColumn(name = "word_id"   )
         private Word word;
 
         @Column(name = "mistake_count" ,  nullable = false)
