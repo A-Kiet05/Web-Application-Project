@@ -25,5 +25,5 @@ public class UserWordDTO {
         private Long id;
         private Long userId;
         private Long wordId;
-        private int errorCount;
+       
 }

@@ -29,7 +29,7 @@ public class UserStats {
 
     
     @Column( name = "best_wpm" , nullable = false)
-    private Integer bestWpm;
+    private Double bestWpm;
 
     
     @Column( name = "average_accuracy" , nullable = false)

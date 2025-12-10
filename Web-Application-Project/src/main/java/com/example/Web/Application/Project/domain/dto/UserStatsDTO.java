@@ -23,6 +23,6 @@ public class UserStatsDTO {
         private Long id;
         private Long userId;
         private Integer totalWordsTyped;
-        private Integer bestWpm;
+        private Double bestWpm;
         private Double averageAccuracy;
 }

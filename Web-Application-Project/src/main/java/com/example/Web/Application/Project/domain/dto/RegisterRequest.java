@@ -1,6 +1,8 @@
 package com.example.Web.Application.Project.domain.dto;
 
 import com.example.Web.Application.Project.domain.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
@@ -12,6 +14,8 @@ import lombok.Setter;
 @Setter
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RegisterRequest {
 
     @NotBlank(message = "username must not be null")
@@ -25,7 +29,7 @@ public class RegisterRequest {
 
     @NotBlank(message = "full name require")
     private String fullName;
-    
+
     private UserRole role;
 
     
