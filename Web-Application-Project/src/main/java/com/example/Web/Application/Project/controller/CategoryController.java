@@ -36,13 +36,13 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories());
     }
 
-    @GetMapping("/get-category-by-id/${id}")
+    @GetMapping("/get-category-by-id/{id}")
     public ResponseEntity<Response> getById(@PathVariable Long id){
 
         return ResponseEntity.ok(categoryService.getCategoryById(id));
     }
 
-    @DeleteMapping("/delete-category/${id}")
+    @DeleteMapping("/delete-category/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> delete(@PathVariable Long id){
         return ResponseEntity.ok(categoryService.deleteCategory(id));

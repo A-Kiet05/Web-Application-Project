@@ -29,7 +29,7 @@ public class GameSessionController {
         return ResponseEntity.ok(gameSessionService.saveSession(sessionRequest));
      }
 
-    @GetMapping("/get-session-by-id/${id}")
+    @GetMapping("/get-session-by-id/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getSessionById(@PathVariable Long id){
 
