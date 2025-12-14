@@ -112,6 +112,22 @@ public class UserStatsServiceImpl implements UserStatsService {
                                 .userStatsDTOs(userStatsDTOs)
                                 .build();     
     }
+
+
+    @Override
+     public Response getYourOwnStats(){
+             User user = userService.getLogin();
+
+         UserStats userStats = userStatsRepository.findByUserId(user.getId()).orElseThrow(()-> new NotFoundException("user Stats not found , guest or something!"));
+         UserStatsDTO userStatsDTO = userStatsMapper.mapTo(userStats);
+       
+
+                 return Response.builder()
+                                .status(200)
+                                .userStatsDTO(userStatsDTO)
+                                .build(); 
+         
+     }
     
     //helper method
      private UserStats calculateStats(User user) {

@@ -36,13 +36,13 @@ public class AchievementController {
         return ResponseEntity.ok(achievementService.getAllAchievements());
     }
 
-    @GetMapping("/get-achievement-by-id/${id}")
+    @GetMapping("/get-achievement-by-id/{id}")
     public ResponseEntity<Response> getById(@PathVariable Long id){
 
         return ResponseEntity.ok(achievementService.getAchievementById(id));
     }
 
-    @DeleteMapping("/delete-achievement/${id}")
+    @DeleteMapping("/delete-achievement/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> delete(@PathVariable Long id){
             

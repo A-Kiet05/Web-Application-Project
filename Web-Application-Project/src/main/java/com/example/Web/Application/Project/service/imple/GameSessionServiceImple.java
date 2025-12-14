@@ -18,10 +18,13 @@ import com.example.Web.Application.Project.repository.GameSessionRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.service.interf.AchievementEvaluatorService;
 import com.example.Web.Application.Project.service.interf.GameSessionService;
+import com.example.Web.Application.Project.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GameSessionServiceImple implements GameSessionService {
 
@@ -29,6 +32,7 @@ public class GameSessionServiceImple implements GameSessionService {
     private final UserRepository userRepository;
     private final Mapper<GameSession, SessionResponse> sessionMapper;
     private final AchievementEvaluatorService achievementEvaluatorService;
+    private final UserService userService;
 
     @Override
     public Response saveSession(SessionRequest sessionRequest) {
@@ -103,6 +107,21 @@ public class GameSessionServiceImple implements GameSessionService {
          return Response.builder()
                         .status(200)
                         .sessionResponses(sessionsResponses)
+                        .build();
+    }
+
+    @Override
+    public  Response getYourOwnSession(){
+        
+        User user = userService.getLogin();
+
+          List<SessionResponse> sessionResponses = sessionRepository.findByUserId(user.getId())
+                                                                    .stream()
+                                                                    .map(sessionMapper::mapTo)
+                                                                    .collect(Collectors.toList());
+         return Response.builder()
+                        .status(200)
+                        .sessionResponses(sessionResponses)
                         .build();
     }
 }

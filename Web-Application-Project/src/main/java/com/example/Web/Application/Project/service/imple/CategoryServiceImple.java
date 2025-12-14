@@ -15,13 +15,15 @@ import com.example.Web.Application.Project.repository.CategoryRepository;
 import com.example.Web.Application.Project.service.interf.CategoryService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CategoryServiceImple implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final Mapper<Category, CategoryDTO> categoryMapper;
+    private final Mapper<Category,CategoryDTO> categoMapper;
 
     @Override
     public Response createCategory(CategoryDTO categoryDTO) {
@@ -43,7 +45,7 @@ public class CategoryServiceImple implements CategoryService {
 
         List<CategoryDTO> list = categoryRepository.findAll(Sort.by(Sort.Direction.DESC , "id"))
                 .stream()
-                .map(categoryMapper::mapTo)
+                .map(categoMapper::mapTo)
                 .collect(Collectors.toList());
 
         return Response.builder()
@@ -57,7 +59,7 @@ public class CategoryServiceImple implements CategoryService {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category not found!"));
-        CategoryDTO categoryDTO = categoryMapper.mapTo(category);
+        CategoryDTO categoryDTO = categoMapper.mapTo(category);
 
         return Response.builder()
                 .status(200)

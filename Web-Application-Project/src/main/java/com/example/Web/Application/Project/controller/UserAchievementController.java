@@ -20,12 +20,12 @@ public class UserAchievementController {
     
     private final UserAchievementService userAchievementService;
 
-    @DeleteMapping("/delete-user-achievement/${id}")
+    @DeleteMapping("/delete-user-achievement/{id}")
     public ResponseEntity<Response> delete(@PathVariable Long id){
         return ResponseEntity.ok(userAchievementService.delete(id));
     }
 
-    @GetMapping("/get-by-id/${id}")
+    @GetMapping("/get-by-id/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getById(@PathVariable Long id){
         return ResponseEntity.ok(userAchievementService.getById(id));
@@ -35,5 +35,11 @@ public class UserAchievementController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getAll(){
         return ResponseEntity.ok(userAchievementService.getAllUserAchievement());
+    }
+
+    @GetMapping("/get-own-achievement")
+    public ResponseEntity<Response> getOwnAchievement(){
+
+        return ResponseEntity.ok(userAchievementService.getYourOwnAchievement());
     }
 }

@@ -19,6 +19,7 @@ import com.example.Web.Application.Project.repository.AchievementRepository;
 import com.example.Web.Application.Project.repository.UserAchievementRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.service.interf.UserAchievementService;
+import com.example.Web.Application.Project.service.interf.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ public class UserAchievementServiceImpl implements UserAchievementService{
     private final UserRepository userRepository;
     private final AchievementRepository achievementRepository;
     private final Mapper<UserAchievement,UserAchievementResponse> userAchievementMapper;
-
+    private final UserService userService;
     
 
     
@@ -79,5 +80,22 @@ public class UserAchievementServiceImpl implements UserAchievementService{
                                 .status(200)
                                 .userAchievementResponses(responseList)
                                 .build();
+    }
+
+
+
+    @Override
+    public Response getYourOwnAchievement(){
+        User user = userService.getLogin();
+
+        List<UserAchievementResponse> ownAchievement = userAchievementRepository.findByUserId(user.getId())
+                                                                                .stream()
+                                                                                .map(userAchievementMapper::mapTo)
+                                                                                .collect(Collectors.toList());
+                   return Response.builder()
+                                .status(200)
+                                .userAchievementResponses(ownAchievement)
+                                .build();
+                            
     }
 }

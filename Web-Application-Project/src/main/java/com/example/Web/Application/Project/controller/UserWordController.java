@@ -31,21 +31,21 @@ public class UserWordController {
             return ResponseEntity.ok(wrongWordService.recordWrongWord(userId , wordId));
         }
     
-    @GetMapping("/get-wrong-words-by-user/${id}")
+    @GetMapping("/get-wrong-words-by-user/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getByUserId(@PathVariable Long id){
 
         return ResponseEntity.ok(wrongWordService.getWrongWords(id));
     }
 
-    @DeleteMapping("/delete-wrong-word/${id}")
+    @DeleteMapping("/delete-wrong-word/{id}")
    
     public ResponseEntity<Response> delete(@PathVariable Long id){
 
         return ResponseEntity.ok(wrongWordService.deleteWrongWord(id));
     }
 
-    @DeleteMapping("/clear-all-wrong-word/${id}")
+    @DeleteMapping("/clear-all-wrong-word/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> clearAll(@PathVariable Long id){
 

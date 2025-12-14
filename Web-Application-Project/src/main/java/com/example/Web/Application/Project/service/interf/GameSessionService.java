@@ -9,4 +9,5 @@ public interface GameSessionService {
 
     Response saveSession(SessionRequest sessionRequest);
     Response getSessionsByUser(Long userId);
+    Response getYourOwnSession();
 }

@@ -16,4 +16,5 @@ public interface UserAchievementService {
     Response getById(Long id);
 
     Response getAllUserAchievement();
+    Response getYourOwnAchievement();
 }

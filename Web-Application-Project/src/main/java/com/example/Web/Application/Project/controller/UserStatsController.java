@@ -32,20 +32,20 @@ public class UserStatsController {
     }
 
 
-    @PutMapping("/update-stats/${id}")
+    @PutMapping("/update-stats/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> update(@PathVariable Long id , @RequestBody UserStats userStats){
 
         return ResponseEntity.ok(userStatsService.update(id, userStats));
     }
 
-    @DeleteMapping("/delete-stats/${id}")
+    @DeleteMapping("/delete-stats/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> delete(@PathVariable Long id ){
         return ResponseEntity.ok(userStatsService.delete(id));
     }
 
-    @GetMapping("/get-by-id/${id}")
+    @GetMapping("/get-by-id/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
      public ResponseEntity<Response> getById(@PathVariable Long id ){
         
@@ -57,5 +57,12 @@ public class UserStatsController {
      public ResponseEntity<Response> getAll(){
 
         return ResponseEntity.ok(userStatsService.getAll());
+     }
+
+
+     @GetMapping("/get-own-stats")
+     public ResponseEntity<Response> getOwnStats(){
+
+        return ResponseEntity.ok(userStatsService.getYourOwnStats());
      }
 }

@@ -10,4 +10,5 @@ public interface UserStatsService {
     Response delete(Long id);
     Response getById(Long id);
     Response getAll();
+    Response getYourOwnStats();
 }
