@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
@@ -28,8 +30,8 @@ public class Score {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
-    private Integer score;
+    @Column(name = "score", nullable = false ,  precision = 5, scale = 2)
+    private BigDecimal score;
 
     @Column(nullable = false , updatable = false)
     private final LocalDateTime createdAt = LocalDateTime.now();

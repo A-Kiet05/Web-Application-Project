@@ -28,5 +28,6 @@ public class Achievement {
            
             private String name;
             private String description;
-            private String condition; // ex: "WPM_50", "ACCURACY_95"
+            @Column(name = "`condition`" , nullable = false)
+            private String conditionType; // ex: "WPM_50", "ACCURACY_95"
 }

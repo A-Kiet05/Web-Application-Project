@@ -1,5 +1,7 @@
 package com.example.Web.Application.Project.service.imple;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,8 +41,16 @@ public class ScoreServiceImple implements ScoreService{
         User user = userRepository.findByEmail(scoreRequest.getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
 
        //===== Calculate score============
-        String typed = scoreRequest.getTypedText().trim();
-        String original = scoreRequest.getOriginalText().trim();
+       String typed = scoreRequest.getTypedText()
+        .toLowerCase()
+        .trim()
+        .replaceAll("[^a-z0-9\\s]", "");
+
+        String original = scoreRequest.getOriginalText()
+                .toLowerCase()
+                .trim()
+                .replaceAll("[^a-z0-9\\s]", "");
+
 
         String[] typedArr = typed.split("\\s+");
         String[] originalArr = original.split("\\s+");
@@ -54,7 +64,10 @@ public class ScoreServiceImple implements ScoreService{
             }
         }
 
-        int finalScore = (int) (((double) correct / totalWords) * 100);
+        BigDecimal finalScore =
+        BigDecimal.valueOf(correct)
+            .divide(BigDecimal.valueOf(totalWords), 2, RoundingMode.HALF_UP)
+            .multiply(BigDecimal.valueOf(100));
 
         //=========================
         Score score = new Score();

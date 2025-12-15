@@ -42,8 +42,12 @@ public class WordServiceImple implements WordService{
              throw new IllegalArgumentException("Only Admin can create new word !");
         }
 
+        Category category = categoryRepository.findById(wordDTO.getCategoryId()).orElseThrow(() -> new NotFoundException("category id not found"));
+
         Word word = new Word();
         word.setWord(wordDTO.getWord());
+        word.setCategory(category);
+
 
         wordRepository.save(word);
 

@@ -23,7 +23,7 @@ public class AchievementController {
     
     private final AchievementService achievementService;
 
-    @PostMapping("create-achievement")
+    @PostMapping("/create-achievement")
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> create(@RequestBody AchievementDTO achievementDTO){
 

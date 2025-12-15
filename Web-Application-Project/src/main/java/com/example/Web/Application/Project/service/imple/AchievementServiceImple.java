@@ -30,7 +30,7 @@ public class AchievementServiceImple implements AchievementService{
         Achievement achievement = new Achievement();
         achievement.setCode(achievementDTO.getCode());
         achievement.setDescription(achievementDTO.getDescription());
-        achievement.setCondition(achievementDTO.getCondition());
+        achievement.setConditionType(achievementDTO.getConditionType());
         achievement.setName(achievementDTO.getName());
 
         achievementRepository.save(achievement);

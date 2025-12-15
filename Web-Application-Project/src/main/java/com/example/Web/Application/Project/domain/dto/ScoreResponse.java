@@ -1,5 +1,6 @@
 package com.example.Web.Application.Project.domain.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -20,7 +21,7 @@ public class ScoreResponse {
     
     private Long id;
     private String email;
-    private Integer score;
+    private BigDecimal score;
     private LocalDateTime createdAt;
     
 }

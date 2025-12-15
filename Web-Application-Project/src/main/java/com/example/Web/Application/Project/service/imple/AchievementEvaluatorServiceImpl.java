@@ -30,7 +30,7 @@ public class AchievementEvaluatorServiceImpl implements AchievementEvaluatorServ
         for (Achievement achievement : achievements) {
 
             // Example condition: ACCURACY_100 or WPM_50
-            String condition = achievement.getCondition();
+            String condition = achievement.getConditionType();
 
             boolean achieved = false;
 

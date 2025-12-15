@@ -29,7 +29,7 @@ public class AuthController{
             return ResponseEntity.ok(userService.registryUser(registerRequest));
      }
 
-     @GetMapping("/login")
+     @PostMapping("/login")
      public ResponseEntity<Response> getLoginUser(@RequestBody LoginRequest loginRequest){
         return ResponseEntity.ok(userService.loginUser(loginRequest));
      }

@@ -42,6 +42,7 @@ public class User {
   private String fullName;
 
   @Column(name = "role" , columnDefinition = "ENUM('USER', 'ADMIN')")
+  @Enumerated(EnumType.STRING)
   private UserRole role;
 
   @OneToMany(mappedBy = "user" , cascade = CascadeType.ALL , orphanRemoval = true)
