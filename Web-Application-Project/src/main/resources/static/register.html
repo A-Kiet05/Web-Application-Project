@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register - TypeMaster</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      body {
+        background-color: #0b1220;
+        color: #e6eef8;
+        font-family: sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .card {
+        background: #0f1724;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        width: 300px;
+      }
+      h2 {
+        color: #d40016;
+        text-align: center;
+      }
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        background: #071022;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #d40016;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      button:hover {
+        background: #b00012;
+      }
+      .link {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 0.9em;
+      }
+      a {
+        color: #98a0b3;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2 style="text-align: center; color: #d40016">Register</h2>
+      <form id="registerForm">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="text" id="fullname" placeholder="Full Name" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Sign Up</button>
+      </form>
+      <div style="text-align: center; margin-top: 10px">
+        <a href="login.html" style="color: #98a0b3"
+          >Already have an account? Login</a
+        >
+      </div>
+    </div>
+
+    <script>
+      const API_BASE = "";
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const payload = {
+            username: document.getElementById("username").value.trim(),
+            fullName: document.getElementById("fullname").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            password: document.getElementById("password").value,
+            role: "USER",
+          };
+          try {
+            const res = await fetch(`${API_BASE}/auth/register`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+            const data = await res.json().catch(() => null);
+            if (!res.ok) {
+              alert("Register failed: " + (data?.message || res.status));
+              return;
+            }
+            alert("Registration successful — please login");
+            window.location.href = "/login.html";
+          } catch (err) {
+            console.error(err);
+            alert("Server error");
+          }
+        });
+    </script>
+  </body>
+</html>
