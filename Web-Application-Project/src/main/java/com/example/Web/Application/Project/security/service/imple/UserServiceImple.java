@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.service.imple;
+package com.example.Web.Application.Project.security.service.imple;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import com.example.Web.Application.Project.exception.InvalidCredentialsException
 import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.security.JwtUtils;
-import com.example.Web.Application.Project.service.interf.UserService;
+import com.example.Web.Application.Project.security.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

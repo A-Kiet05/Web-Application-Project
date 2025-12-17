@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.service.interf.UserService;
+import com.example.Web.Application.Project.security.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
 

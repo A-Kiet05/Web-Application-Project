@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.CategoryDTO;
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.service.interf.CategoryService;
+import com.example.Web.Application.Project.security.service.interf.CategoryService;
 
 import lombok.RequiredArgsConstructor;
 

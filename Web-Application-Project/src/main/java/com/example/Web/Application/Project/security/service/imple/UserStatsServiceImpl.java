@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.service.imple;
+package com.example.Web.Application.Project.security.service.imple;
 
 
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.GameSessionRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.repository.UserStatsRepository;
-import com.example.Web.Application.Project.service.interf.UserService;
-import com.example.Web.Application.Project.service.interf.UserStatsService;
+import com.example.Web.Application.Project.security.service.interf.UserService;
+import com.example.Web.Application.Project.security.service.interf.UserStatsService;
 
 import java.util.List;
 import java.util.Optional;

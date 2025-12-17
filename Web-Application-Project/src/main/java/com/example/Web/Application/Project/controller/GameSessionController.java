@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.SessionRequest;
-import com.example.Web.Application.Project.service.interf.GameSessionService;
+import com.example.Web.Application.Project.security.service.interf.GameSessionService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +23,7 @@ public class GameSessionController {
     private final GameSessionService gameSessionService;
 
     @PostMapping("/save-session")
-    
-     public ResponseEntity<Response> saveSession(@RequestBody SessionRequest sessionRequest){
+    public ResponseEntity<Response> saveSession(@RequestBody SessionRequest sessionRequest){
 
         return ResponseEntity.ok(gameSessionService.saveSession(sessionRequest));
      }

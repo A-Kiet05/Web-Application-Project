@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.ScoreRequest;
 import com.example.Web.Application.Project.domain.dto.ScoreResponse;
-import com.example.Web.Application.Project.service.interf.ScoreService;
+import com.example.Web.Application.Project.security.service.interf.ScoreService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.service.imple;
+package com.example.Web.Application.Project.security.service.imple;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import com.example.Web.Application.Project.domain.entities.User;
 import com.example.Web.Application.Project.domain.entities.UserAchievement;
 import com.example.Web.Application.Project.repository.AchievementRepository;
 import com.example.Web.Application.Project.repository.UserAchievementRepository;
-import com.example.Web.Application.Project.service.interf.AchievementEvaluatorService;
+import com.example.Web.Application.Project.security.service.interf.AchievementEvaluatorService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
