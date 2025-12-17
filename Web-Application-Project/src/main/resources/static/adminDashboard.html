@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard — TypeMaster</title>
+    <style>
+      :root {
+        --bg: #0b1220;
+        --panel: #0f1724;
+        --accent: #d40016; 
+        --muted: #98a0b3;
+        --text: #e6eef8;
+        --glass: rgba(255, 255, 255, 0.03);
+      }
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto Mono", monospace;
+        margin: 0;
+        background: linear-gradient(180deg, #071022 0%, #071827 100%);
+        color: var(--text);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 36px auto;
+        padding: 24px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        padding: 20px;
+        background: var(--panel);
+        border-radius: 12px;
+        border-left: 5px solid var(--accent);
+      }
+
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: white;
+      }
+
+      .title {
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .subtitle {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .top-controls {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+
+      .btn {
+        background: var(--panel);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 10px 18px;
+        border-radius: 6px;
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+      }
+      .btn:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .btn.primary {
+        background: var(--accent);
+        color: white;
+        border: none;
+      }
+      .btn.primary:hover {
+        opacity: 0.9;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-top: 25px;
+      }
+
+      /* PANEL STYLE SYNCED WITH GAME.HTML WRAP */
+      .card {
+        background: rgba(15, 23, 36, 0.8);
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .card h3 {
+        margin: 0 0 10px 0;
+        color: var(--accent);
+        font-size: 1.1rem;
+      }
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+        line-height: 1.4;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 15px;
+      }
+
+      .action-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 14px;
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.9rem;
+        transition: 0.2s;
+      }
+      .action-link:hover {
+        color: var(--text);
+        border-color: var(--accent);
+        background: rgba(212, 0, 22, 0.1);
+      }
+
+      .search-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .search {
+        flex: 1;
+        padding: 12px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 600px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo">TM</div>
+          <div>
+            <div class="title">TYPE MASTER</div>
+            <div class="subtitle">System Administration Panel</div>
+          </div>
+        </div>
+
+        <div class="top-controls">
+          <div style="text-align: right">
+            <div id="admin-email" style="font-weight: 700">Loading...</div>
+            <div
+              id="admin-role"
+              class="subtitle"
+              style="text-transform: uppercase; color: var(--accent)"
+            >
+              Administrator
+            </div>
+          </div>
+          <button class="btn" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <section class="card">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+          "
+        >
+          <div>
+            <h2 style="margin: 0">System Overview</h2>
+            <p class="subtitle" style="margin-top: 4px">
+              Manage users, words, and achievements.
+            </p>
+          </div>
+          <div style="display: flex; gap: 10px">
+            <button
+              class="btn primary"
+              onclick="location.href='/admin/users.html'"
+            >
+              View Users
+            </button>
+            <button
+              class="btn"
+              onclick="location.href='/admin/create-user.html'"
+            >
+              Add User
+            </button>
+          </div>
+        </div>
+
+        <div class="search-row">
+          <input
+            class="search"
+            placeholder="Quick search users or records..."
+          />
+          <button class="btn">Search</button>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <h3>User Management</h3>
+            <p>Monitor registration and handle bans/roles.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/users.html"
+                ><span>User List</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/create-user.html"
+                ><span>Create Admin</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Words & Categories</h3>
+            <p>Update the typing dictionary and organize categories.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/categories.html"
+                ><span>Categories</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/words.html"
+                ><span>Word Bank</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Achievements</h3>
+            <p>Define criteria for system achievements.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/achievements.html"
+                ><span>Manage Types</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/user-achievements.html"
+                ><span>User Unlocks</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Live Stats</h3>
+            <p>Real-time view of player performance.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/user-stats.html"
+                ><span>User Stats</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/leaderboard.html"
+                ><span>Leaderboard</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Session Logs</h3>
+            <p>History of all games played on the platform.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/game-sessions.html"
+                ><span>All Sessions</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/scores.html"
+                ><span>All Scores</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Maintenance</h3>
+            <p>System health, logs, and database status.</p>
+            <div class="actions">
+              <a class="action-link" href="/admin/system-health.html"
+                ><span>System Health</span><span>&rarr;</span></a
+              >
+              <a class="action-link" href="/admin/migrations.html"
+                ><span>Migrations</span><span>&rarr;</span></a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const token = localStorage.getItem("jwt_token");
+      const role = localStorage.getItem("user_role");
+
+      if (!token || !role || !role.toUpperCase().includes("ADMIN")) {
+        window.location.href = "/login.html";
+      }
+
+      window.onload = () => {
+        const emailEl = document.getElementById("admin-email");
+        const roleEl = document.getElementById("admin-role");
+
+        const savedEmail = localStorage.getItem("user_email");
+        if (savedEmail) {
+          emailEl.innerText = savedEmail;
+        } else {
+          try {
+            const payload = JSON.parse(
+              atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+            );
+            emailEl.innerText = payload.sub || payload.email || "Admin User";
+          } catch (e) {
+            emailEl.innerText = "Administrator";
+          }
+        }
+        roleEl.innerText = role;
+      };
+
+      function logout() {
+        localStorage.clear();
+        window.location.href = "/login.html";
+      }
+    </script>
+  </body>
+</html>
