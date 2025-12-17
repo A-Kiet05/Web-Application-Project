@@ -82,6 +82,7 @@ public class UserServiceImple implements UserService{
                        .token(token)
                        .expirationTime("6 months")
                        .role(user.getRole().name())
+                       .user(userMapper.mapTo(user))
                        .build();
     }
 
