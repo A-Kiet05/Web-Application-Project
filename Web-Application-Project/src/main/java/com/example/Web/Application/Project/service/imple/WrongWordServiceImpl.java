@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 
 
@@ -18,7 +18,7 @@ import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.repository.UserWordRepository;
 import com.example.Web.Application.Project.repository.WordRepository;
-import com.example.Web.Application.Project.security.service.interf.WrongWordService;
+import com.example.Web.Application.Project.service.interf.WrongWordService;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.interf;
+package com.example.Web.Application.Project.service.interf;
 
 import com.example.Web.Application.Project.domain.dto.AchievementDTO;
 import com.example.Web.Application.Project.domain.dto.Response;

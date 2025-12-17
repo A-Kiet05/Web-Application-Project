@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 import java.util.List;
 
@@ -17,9 +17,8 @@ import com.example.Web.Application.Project.exception.NotFoundException;
 import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.CategoryRepository;
 import com.example.Web.Application.Project.repository.WordRepository;
-import com.example.Web.Application.Project.security.service.interf.CategoryService;
-import com.example.Web.Application.Project.security.service.interf.UserService;
-import com.example.Web.Application.Project.security.service.interf.WordService;
+import com.example.Web.Application.Project.service.interf.UserService;
+import com.example.Web.Application.Project.service.interf.WordService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

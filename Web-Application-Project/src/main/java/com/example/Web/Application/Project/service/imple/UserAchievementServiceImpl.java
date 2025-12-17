@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 
 
@@ -18,8 +18,8 @@ import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.AchievementRepository;
 import com.example.Web.Application.Project.repository.UserAchievementRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
-import com.example.Web.Application.Project.security.service.interf.UserAchievementService;
-import com.example.Web.Application.Project.security.service.interf.UserService;
+import com.example.Web.Application.Project.service.interf.UserAchievementService;
+import com.example.Web.Application.Project.service.interf.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;

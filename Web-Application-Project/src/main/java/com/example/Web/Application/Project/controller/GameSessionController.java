@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.SessionRequest;
-import com.example.Web.Application.Project.security.service.interf.GameSessionService;
+import com.example.Web.Application.Project.service.interf.GameSessionService;
 
 import lombok.RequiredArgsConstructor;
 

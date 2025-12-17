@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.interf;
+package com.example.Web.Application.Project.service.interf;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;

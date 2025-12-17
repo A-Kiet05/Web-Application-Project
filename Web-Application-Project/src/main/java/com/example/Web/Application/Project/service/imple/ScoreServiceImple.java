@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,8 +19,8 @@ import com.example.Web.Application.Project.exception.NotFoundException;
 import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.ScoreRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
-import com.example.Web.Application.Project.security.service.interf.ScoreService;
-import com.example.Web.Application.Project.security.service.interf.UserService;
+import com.example.Web.Application.Project.service.interf.ScoreService;
+import com.example.Web.Application.Project.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

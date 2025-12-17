@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 import java.util.Date;
 import java.util.List;
@@ -16,10 +16,10 @@ import com.example.Web.Application.Project.exception.NotFoundException;
 import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.GameSessionRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
-import com.example.Web.Application.Project.security.service.interf.AchievementEvaluatorService;
-import com.example.Web.Application.Project.security.service.interf.GameSessionService;
-import com.example.Web.Application.Project.security.service.interf.ScoreService;
-import com.example.Web.Application.Project.security.service.interf.UserService;
+import com.example.Web.Application.Project.service.interf.AchievementEvaluatorService;
+import com.example.Web.Application.Project.service.interf.GameSessionService;
+import com.example.Web.Application.Project.service.interf.ScoreService;
+import com.example.Web.Application.Project.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

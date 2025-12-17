@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.security.service.interf.WrongWordService;
+import com.example.Web.Application.Project.service.interf.WrongWordService;
 
 import lombok.RequiredArgsConstructor;
 

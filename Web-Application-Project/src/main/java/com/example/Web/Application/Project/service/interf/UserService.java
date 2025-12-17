@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.interf;
+package com.example.Web.Application.Project.service.interf;
 
 import com.example.Web.Application.Project.domain.dto.LoginRequest;
 import com.example.Web.Application.Project.domain.dto.RegisterRequest;

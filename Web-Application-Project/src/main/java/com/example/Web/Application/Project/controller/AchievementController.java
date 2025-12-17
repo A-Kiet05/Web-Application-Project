@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.AchievementDTO;
 import com.example.Web.Application.Project.domain.dto.Response;
-import com.example.Web.Application.Project.security.service.interf.AchievementService;
+import com.example.Web.Application.Project.service.interf.AchievementService;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.example.Web.Application.Project.security.service.imple;
+package com.example.Web.Application.Project.service.imple;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ import com.example.Web.Application.Project.domain.entities.Achievement;
 import com.example.Web.Application.Project.exception.NotFoundException;
 import com.example.Web.Application.Project.mapper.Mapper;
 import com.example.Web.Application.Project.repository.AchievementRepository;
-import com.example.Web.Application.Project.security.service.interf.AchievementService;
+import com.example.Web.Application.Project.service.interf.AchievementService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
