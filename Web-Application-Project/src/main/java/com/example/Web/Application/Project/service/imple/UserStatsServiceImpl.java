@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.Web.Application.Project.domain.dto.Response;
 import com.example.Web.Application.Project.domain.dto.UserStatsDTO;
+import com.example.Web.Application.Project.domain.dto.UserStatsRequest;
 import com.example.Web.Application.Project.domain.entities.GameSession;
 import com.example.Web.Application.Project.domain.entities.User;
 import com.example.Web.Application.Project.domain.entities.UserStats;
@@ -36,35 +37,43 @@ public class UserStatsServiceImpl implements UserStatsService {
     private final UserService userService;
 
     @Override
-    public Response create(UserStats userStatsRequest) {
-        User user = userRepo.findById(userStatsRequest.getUser().getId())
+    public Response create(UserStatsRequest userStatsRequest) {
+
+        User user = userRepo.findByEmail(userStatsRequest.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Optional<UserStats> existing = userStatsRepository.findByUserId(user.getId());
-        if(existing.isPresent()){
+        if (userStatsRepository.findByUserId(user.getId()).isPresent()) {
                 throw new IllegalArgumentException("Stats already exist for this user");
         }
 
-        UserStats userStats = calculateStats(user);
-        userStatsRepository.save(userStats);
 
-       return Response.builder()
+                UserStats stats = new UserStats();
+                stats.setUser(user);
+
+                applyCalculatedStats(stats, user);
+
+                userStatsRepository.save(stats);
+
+        return Response.builder()
                       .status(200)
                       .message("Created Successfully!")
                       .build();
     }
 
     @Override
-    public Response update(Long id, UserStats userStatsRequest) {
+    public Response update(Long id) {
 
         UserStats stats = userStatsRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("UserStats not found"));
 
         User user = stats.getUser();
-        UserStats updatedUserStats = calculateStats(user);
+
+        applyCalculatedStats(stats, user); 
+
+        userStatsRepository.save(stats); 
 
 
-        userStatsRepository.save(updatedUserStats);
+       
 
        return Response.builder()
                       .status(200)
@@ -130,35 +139,31 @@ public class UserStatsServiceImpl implements UserStatsService {
      }
     
     //helper method
-     private UserStats calculateStats(User user) {
-         
-        
-        List<GameSession> sessions = gameSessionRepository.findByUserId(user.getId());
+        private void applyCalculatedStats(UserStats stats, User user) {
 
-        if (sessions.isEmpty()) {
-            throw new NotFoundException("User has no game sessions to calculate stats.");
+                List<GameSession> sessions = gameSessionRepository.findByUserId(user.getId());
+
+                if (sessions.isEmpty()) {
+                        throw new NotFoundException("User has no game sessions to calculate stats.");
+                }
+
+                int totalWordsTyped = sessions.stream()
+                        .mapToInt(GameSession::getWordsTyped)
+                        .sum();
+
+                double bestWpm = sessions.stream()
+                        .mapToDouble(GameSession::getWpm)
+                        .max()
+                        .orElse(0);
+
+                double avgAccuracy = sessions.stream()
+                        .mapToDouble(GameSession::getAccuracy)
+                        .average()
+                        .orElse(0);
+
+                stats.setTotalWordsTyped(totalWordsTyped);
+                stats.setBestWpm(bestWpm);
+                stats.setAverageAccuracy(avgAccuracy);
         }
 
-        int totalWordsTyped = sessions.stream()
-                .mapToInt(GameSession::getWordsTyped)
-                .sum();
-
-        double bestWpm = sessions.stream()
-                .mapToDouble(GameSession::getWpm)
-                .max()
-                .orElse(0);
-
-        double avgAccuracy = sessions.stream()
-                .mapToDouble(GameSession::getAccuracy)
-                .average()
-                .orElse(0);
-
-        UserStats stats = new UserStats();
-        stats.setUser(user);
-        stats.setTotalWordsTyped(totalWordsTyped);
-        stats.setBestWpm(bestWpm);
-        stats.setAverageAccuracy(avgAccuracy);
-
-        return stats;
-    }
 }

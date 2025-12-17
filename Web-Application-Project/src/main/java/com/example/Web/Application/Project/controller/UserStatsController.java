@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Web.Application.Project.domain.dto.Response;
+import com.example.Web.Application.Project.domain.dto.UserStatsRequest;
 import com.example.Web.Application.Project.domain.entities.UserStats;
 import com.example.Web.Application.Project.service.interf.UserStatsService;
 
@@ -26,7 +27,7 @@ public class UserStatsController {
 
     @PostMapping("/create-user-stats")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> create(@RequestBody UserStats userStats){
+    public ResponseEntity<Response> create(@RequestBody UserStatsRequest userStats){
 
         return ResponseEntity.ok(userStatsService.create(userStats));
     }
@@ -34,9 +35,9 @@ public class UserStatsController {
 
     @PutMapping("/update-stats/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<Response> update(@PathVariable Long id , @RequestBody UserStats userStats){
+    public ResponseEntity<Response> update(@PathVariable Long id ){
 
-        return ResponseEntity.ok(userStatsService.update(id, userStats));
+        return ResponseEntity.ok(userStatsService.update(id));
     }
 
     @DeleteMapping("/delete-stats/{id}")

@@ -23,10 +23,10 @@ import lombok.RequiredArgsConstructor;
 public class ScoreController {
     private final ScoreService scoreService;
 
-    @PostMapping("/post-score")
-    public ResponseEntity<Response> postScore(@RequestBody ScoreRequest scoreRequest){
-        return ResponseEntity.ok(scoreService.postScore(scoreRequest));
-    }
+    // @PostMapping("/post-score")
+    // public ResponseEntity<Response> postScore(@RequestBody ScoreRequest scoreRequest){
+    //     return ResponseEntity.ok(scoreService.postScore(scoreRequest));
+    // }
 
     @GetMapping("/all")
     public ResponseEntity<Response> getAllScore(){

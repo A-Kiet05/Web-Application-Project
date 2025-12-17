@@ -18,6 +18,7 @@ import com.example.Web.Application.Project.repository.GameSessionRepository;
 import com.example.Web.Application.Project.repository.UserRepository;
 import com.example.Web.Application.Project.service.interf.AchievementEvaluatorService;
 import com.example.Web.Application.Project.service.interf.GameSessionService;
+import com.example.Web.Application.Project.service.interf.ScoreService;
 import com.example.Web.Application.Project.service.interf.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,12 +34,19 @@ public class GameSessionServiceImple implements GameSessionService {
     private final Mapper<GameSession, SessionResponse> sessionMapper;
     private final AchievementEvaluatorService achievementEvaluatorService;
     private final UserService userService;
+    private final ScoreService scoreService;
 
     @Override
     public Response saveSession(SessionRequest sessionRequest) {
 
         User user = userRepository.findById(sessionRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found!"));
+
+         //===== Auto save score ==========
+         
+         scoreService.postScore(user.getEmail(), sessionRequest.getTypedText(), sessionRequest.getOriginalText());
+
+         //===================
         
                 // ========== MONKEYTYPE AUTO CALCULATION ==========
         String typed = sessionRequest.getTypedText().trim();

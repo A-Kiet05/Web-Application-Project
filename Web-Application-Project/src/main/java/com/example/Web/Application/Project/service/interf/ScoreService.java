@@ -8,7 +8,7 @@ import com.example.Web.Application.Project.domain.dto.ScoreResponse;
 
 public interface ScoreService {
     
-    Response postScore(ScoreRequest scoreRequest);
+    Response postScore(String email , String typedText , String originalText);
     Response getAllScore();
     Response leaderBoard(int top ,Pageable pageable );
 }

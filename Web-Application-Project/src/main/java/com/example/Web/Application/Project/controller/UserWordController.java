@@ -23,7 +23,6 @@ public class UserWordController {
     private final WrongWordService wrongWordService;
 
     @PostMapping("/create-wrong-word")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> recordWrongWord( 
           @RequestParam (required = true) Long userId ,
           @RequestParam (required =  true)Long wordId

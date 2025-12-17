@@ -23,7 +23,7 @@ public class GameSessionController {
     private final GameSessionService gameSessionService;
 
     @PostMapping("/save-session")
-     @PreAuthorize("hasAuthority('ADMIN')")
+    
      public ResponseEntity<Response> saveSession(@RequestBody SessionRequest sessionRequest){
 
         return ResponseEntity.ok(gameSessionService.saveSession(sessionRequest));

@@ -36,17 +36,17 @@ public class ScoreServiceImple implements ScoreService{
     private final UserRepository userRepository;
 
     @Override
-    public Response postScore(ScoreRequest scoreRequest){
+    public Response postScore(String email , String typedText , String originalText){
          
-        User user = userRepository.findByEmail(scoreRequest.getEmail()).orElseThrow(() -> new NotFoundException("Email not found!"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Email not found!"));
 
        //===== Calculate score============
-       String typed = scoreRequest.getTypedText()
+       String typed = typedText
         .toLowerCase()
         .trim()
         .replaceAll("[^a-z0-9\\s]", "");
 
-        String original = scoreRequest.getOriginalText()
+        String original = originalText
                 .toLowerCase()
                 .trim()
                 .replaceAll("[^a-z0-9\\s]", "");
@@ -63,11 +63,16 @@ public class ScoreServiceImple implements ScoreService{
                 correct++;
             }
         }
+      
+        System.out.println("Correct : "  + correct);
+        System.out.println("Total Words : "  + totalWords);
 
         BigDecimal finalScore =
         BigDecimal.valueOf(correct)
             .divide(BigDecimal.valueOf(totalWords), 2, RoundingMode.HALF_UP)
             .multiply(BigDecimal.valueOf(100));
+
+        System.out.println("the result is : "  + finalScore);
 
         //=========================
         Score score = new Score();
