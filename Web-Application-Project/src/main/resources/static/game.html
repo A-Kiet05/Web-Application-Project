@@ -19,19 +19,19 @@
       body {
         height: 100%;
         margin: 0;
+        overflow: hidden;
         background: linear-gradient(180deg, #071022 0%, #071827 100%);
         color: var(--text);
         font-family: "Roboto Mono", monospace;
-        overflow: hidden;
       }
       .wrap {
         max-width: 920px;
         margin: 48px auto;
         padding: 28px;
+        text-align: center;
         background: rgba(15, 23, 36, 0.8);
         border-radius: 12px;
         box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
-        text-align: center;
       }
       header {
         display: flex;
@@ -49,7 +49,7 @@
         text-decoration: none;
         margin-left: 15px;
         font-size: 14px;
-        transition: color 0.2s;
+        transition: 0.2s;
       }
       .nav-links a:hover {
         color: var(--text);
@@ -63,7 +63,6 @@
         color: var(--accent);
       }
       .play-area {
-        position: relative;
         background: rgba(0, 0, 0, 0.2);
         padding: 20px;
         border-radius: 8px;
@@ -73,7 +72,6 @@
         text-align: left;
         user-select: none;
         cursor: text;
-        overflow: hidden;
         margin-bottom: 20px;
       }
       .word {
@@ -132,7 +130,6 @@
         border: none;
         padding: 10px 20px;
         border-radius: 5px;
-        font-size: 1rem;
         cursor: pointer;
         margin-top: 15px;
       }
@@ -158,12 +155,7 @@
       </div>
 
       <div class="play-area" id="words-container" onclick="focusInput()">
-        <div class="word">
-          <span class="letter">L</span><span class="letter">o</span
-          ><span class="letter">a</span><span class="letter">d</span
-          ><span class="letter">i</span><span class="letter">n</span
-          ><span class="letter">g</span>...
-        </div>
+        Loading...
       </div>
 
       <div style="color: var(--muted); font-size: 0.9rem">
@@ -172,87 +164,48 @@
     </div>
 
     <div class="overlay" id="overlay"></div>
-    <div class="result-modal" id="resultModal" style="display: none">
+    <div class="result-modal" id="resultModal">
       <h2 style="color: var(--accent)">Game Over!</h2>
       <h1 id="final-wpm" style="font-size: 3rem; margin: 10px 0">0</h1>
       <p>WPM</p>
-      <p id="accuracy-text">Accuracy: 100%</p>
+      <p id="accuracy-text">Syncing...</p>
       <button class="restart" onclick="resetGame()">Play Again</button>
     </div>
 
     <script>
       const GAME_DURATION = 30;
-      const API_BASE = ""; 
       let token = localStorage.getItem("jwt_token");
-
       if (!token) window.location.href = "/login.html";
 
-      let words = [];
-      let timer = GAME_DURATION;
-      let isRunning = false;
-      let timerInterval = null;
-      let currentWordIndex = 0;
-      let currentCharIndex = 0;
-      let correctKeystrokes = 0;
-      let totalKeystrokes = 0;
-
-      let typedText = "";
+      let words = [],
+        typedText = "";
+      let timer = GAME_DURATION,
+        isRunning = false,
+        timerInterval = null;
+      let currentWordIndex = 0,
+        currentCharIndex = 0;
 
       const container = document.getElementById("words-container");
       const timerEl = document.getElementById("timer");
-      const wpmEl = document.getElementById("wpm-display");
       const modal = document.getElementById("resultModal");
       const overlay = document.getElementById("overlay");
 
-      window.addEventListener("load", () => {
+      window.onload = () => {
         fetchWords();
         document.addEventListener("keydown", handleTyping);
-      });
+      };
 
-      // try to extract email from JWT payload (if available)
-      function getEmailFromToken() {
-        if (!token) return null;
-        try {
-          const parts = token.split(".");
-          if (parts.length < 2) return null;
-          const payload = JSON.parse(atob(parts[1].replace(/-/g,"+").replace(/_/g,"/")));
-          // common claim names: email, sub, username
-          return payload.email || payload.sub || payload.username || null;
-        } catch (e) {
-          return null;
-        }
-      }
-
-      // Fetch words (relative endpoint)
       async function fetchWords() {
         try {
-          const url = `/words/get-random-word?limit=50`;
-          const res = await fetch(url, {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
-            },
+          const res = await fetch(`/words/get-random-word?limit=50`, {
+            headers: { Authorization: `Bearer ${token}` },
           });
-          if (!res.ok) {
-            const text = await res.text().catch(() => null);
-            container.innerHTML = `<span style="color:red">Server ${res.status} ${res.statusText}</span>`;
-            console.error("fetchWords failed", res.status, res.statusText, text);
-            return;
-          }
-          const json = await res.json().catch(() => null);
-          const list = json?.wordDTOs || json?.data || json || [];
-          words = Array.isArray(list)
-            ? list.map((w) => (typeof w === "string" ? w : w.word || w.wordText || w.text))
-            : [];
-          if (!words.length) {
-            container.innerHTML = `<span style="color:var(--muted)">No words received</span>`;
-            return;
-          }
+          const json = await res.json();
+          const list = json?.wordDTOs || json || [];
+          words = list.map((w) => (typeof w === "string" ? w : w.word));
           renderWords();
         } catch (err) {
-          console.error("Failed to fetch words", err);
-          container.innerHTML = `<span style="color:red">Error connecting to server</span>`;
+          container.innerHTML = `<span style="color:red">Server Error</span>`;
         }
       }
 
@@ -261,7 +214,7 @@
         words.forEach((word, wIdx) => {
           const wordDiv = document.createElement("div");
           wordDiv.className = "word";
-          (word || "").split("").forEach((ch, cIdx) => {
+          word.split("").forEach((ch, cIdx) => {
             const s = document.createElement("span");
             s.className = "letter";
             s.innerText = ch;
@@ -270,16 +223,6 @@
           });
           container.appendChild(wordDiv);
         });
-        // reset counters
-        currentWordIndex = 0;
-        currentCharIndex = 0;
-        correctKeystrokes = 0;
-        totalKeystrokes = 0;
-        typedText = ""; // reset typed text
-        isRunning = false;
-        timer = GAME_DURATION;
-        timerEl.innerText = timer;
-        wpmEl.innerText = "0 WPM";
       }
 
       function handleTyping(e) {
@@ -288,100 +231,74 @@
           resetGame();
           return;
         }
-        if (modal.style.display === "block") return;
-        if (e.key.length > 1 && e.key !== "Backspace" && e.key !== " ") return;
-
-        const wordDivs = document.querySelectorAll(".word");
-        if (!wordDivs.length) return;
+        if (
+          modal.style.display === "block" ||
+          (e.key.length > 1 && e.key !== "Backspace" && e.key !== " ")
+        )
+          return;
 
         if (!isRunning) {
           isRunning = true;
           startTimer();
         }
 
-        const currentLetters = wordDivs[currentWordIndex].querySelectorAll(".letter");
+        const wordDivs = document.querySelectorAll(".word");
+        const currentLetters =
+          wordDivs[currentWordIndex].querySelectorAll(".letter");
 
         if (e.key === "Backspace") {
-          // update typedText: remove last character if any
-          if (typedText.length > 0) {
-            typedText = typedText.slice(0, -1);
-          }
-
+          if (typedText.length > 0) typedText = typedText.slice(0, -1);
           if (currentCharIndex > 0) {
-            const prev = currentLetters[currentCharIndex - 1];
-            prev.classList.remove("correct", "wrong");
             currentCharIndex--;
-            updateCursor();
-          } else {
-            // if at beginning of word, move to previous word if possible and remove last typed char there
-            if (currentWordIndex > 0) {
-              currentWordIndex--;
-              const prevLetters = wordDivs[currentWordIndex].querySelectorAll(".letter");
-              currentCharIndex = prevLetters.length > 0 ? prevLetters.length : 0;
-              if (currentCharIndex > 0) {
-                const prev = prevLetters[currentCharIndex - 1];
-                prev.classList.remove("correct", "wrong");
-                currentCharIndex--;
-              }
-              updateCursor();
-            }
+            currentLetters[currentCharIndex].classList.remove(
+              "correct",
+              "wrong"
+            );
+          } else if (currentWordIndex > 0) {
+            currentWordIndex--;
+            currentCharIndex =
+              wordDivs[currentWordIndex].querySelectorAll(".letter").length;
           }
+          updateCursor();
           return;
         }
 
         if (e.key === " ") {
           e.preventDefault();
-          // append single space to typedText (representing finished word)
           typedText += " ";
-
-          if (currentWordIndex >= words.length - 1) {
-            finishGame();
-            return;
-          }
           currentWordIndex++;
           currentCharIndex = 0;
+          if (currentWordIndex >= words.length) finishGame();
           updateCursor();
           return;
         }
 
-        // CHARACTER
         if (currentCharIndex < currentLetters.length) {
-          totalKeystrokes++;
-          const expected = (words[currentWordIndex] || "")[currentCharIndex] || "";
+          const expected = words[currentWordIndex][currentCharIndex];
           const span = currentLetters[currentCharIndex];
-
-          // append char to typedText
           typedText += e.key;
-
-          if (e.key === expected) {
-            span.classList.add("correct");
-            correctKeystrokes++;
-          } else {
-            span.classList.add("wrong");
-          }
+          span.classList.add(e.key === expected ? "correct" : "wrong");
           currentCharIndex++;
           updateCursor();
-
-          // if finished last char of last word -> finish
-          if (currentWordIndex === words.length - 1 && currentCharIndex >= currentLetters.length) {
-            setTimeout(() => finishGame(), 120);
-          }
+          if (
+            currentWordIndex === words.length - 1 &&
+            currentCharIndex === currentLetters.length
+          )
+            finishGame();
         }
       }
 
       function updateCursor() {
-        document.querySelectorAll(".letter.active").forEach((el) => el.classList.remove("active"));
+        document
+          .querySelectorAll(".letter.active")
+          .forEach((el) => el.classList.remove("active"));
         const wordDivs = document.querySelectorAll(".word");
-        if (currentWordIndex < wordDivs.length) {
-          const letters = wordDivs[currentWordIndex].querySelectorAll(".letter");
-          if (letters[currentCharIndex]) letters[currentCharIndex].classList.add("active");
-        }
+        const letters = wordDivs[currentWordIndex]?.querySelectorAll(".letter");
+        if (letters && letters[currentCharIndex])
+          letters[currentCharIndex].classList.add("active");
       }
 
       function startTimer() {
-        timer = GAME_DURATION;
-        timerEl.innerText = timer;
-        clearInterval(timerInterval);
         timerInterval = setInterval(() => {
           timer--;
           timerEl.innerText = timer;
@@ -391,75 +308,66 @@
       }
 
       function calculateStats() {
-        const elapsedSec = Math.max(1, GAME_DURATION - timer);
-        const minutes = elapsedSec / 60;
-        const wpm = Math.round((correctKeystrokes / 5) / (minutes || 1 / 60));
-        wpmEl.innerText = `${wpm} WPM`;
-        return wpm;
+        return;
       }
 
       async function finishGame() {
-        if (timerInterval) {
-          clearInterval(timerInterval);
-          timerInterval = null;
-        }
+        clearInterval(timerInterval);
         isRunning = false;
-        const finalWpm = Math.max(
-          0,
-          Math.round((correctKeystrokes / 5) / (Math.max(1, GAME_DURATION - timer) / 60))
-        );
-        const accuracy =
-          totalKeystrokes > 0 ? Math.round((correctKeystrokes / totalKeystrokes) * 100) : 0;
 
-        document.getElementById("final-wpm").innerText = finalWpm;
-        document.getElementById("accuracy-text").innerText = `Accuracy: ${accuracy}%`;
-        document.getElementById("gameContainer").classList.add("blur");
-        modal.style.display = "block";
-        overlay.style.display = "block";
-
-        // Prepare payload expected by backend ScoreService (email, originalText, typedText)
-        const originalText = words.join(" ");
-        // Try extract email from token or localStorage
-        const emailFromToken = getEmailFromToken();
-        const emailFromStorage = localStorage.getItem("user_email");
-        const email = emailFromToken || emailFromStorage || null;
-
+        const userId = localStorage.getItem("user_id");
         const payload = {
-          email: email,
-          originalText: originalText,
-          typedText: typedText,
+          userId: String(userId),
+          duration: String(GAME_DURATION - timer),
+          typedText: typedText.trim(),
+          originalText: words.join(" "),
+          mode: "TIME",
         };
 
+        modal.style.display = "block";
+        overlay.style.display = "block";
+        document.getElementById("gameContainer").classList.add("blur");
+
         try {
-          const res = await fetch(`${API_BASE}/scores/post-score`, {
+          const res = await fetch(`/game-session/save-session`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(payload),
           });
-
-          if (!res.ok) {
-            const txt = await res.text().catch(() => null);
-            console.error("post-score failed", res.status, res.statusText, txt);
-          } else {
-            console.log("score submitted", await res.json().catch(()=>null));
-          }
         } catch (err) {
-          console.warn("Could not submit score", err);
+          document.getElementById("accuracy-text").innerText =
+            "Error saving results.";
         }
+        try {
+        const res = await fetch(`/game-session/get-own-session`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const history = data.sessionResponses;
+
+        const latest = history[history.length - 1];
+
+        document.getElementById("final-wpm").innerText = Math.round(latest.wpm);
+        document.getElementById("accuracy-text").innerText = 
+            `Accuracy: ${Math.round(latest.accuracy)}%`;
+
+    } catch (err) {
+        console.error("Could not fetch history", err);
+    }
       }
 
       function resetGame() {
         window.location.reload();
       }
       function logout() {
-        localStorage.removeItem("jwt_token");
+        localStorage.clear();
         window.location.href = "./login.html";
       }
       function focusInput() {
-        container.focus();
+        /* focus helper */
       }
     </script>
   </body>
