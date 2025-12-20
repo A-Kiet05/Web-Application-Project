@@ -12,6 +12,7 @@ public interface UserService {
     Response loginUser(LoginRequest loginRequest);
 
     Response getAllUser();
+    Response getMyInfo();
     User getLogin();
    
 }

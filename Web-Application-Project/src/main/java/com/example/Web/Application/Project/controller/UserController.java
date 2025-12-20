@@ -22,8 +22,11 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
     
     private final UserService userService;
-    
 
+    @GetMapping("/my-info")
+    public ResponseEntity<Response> getMyInfo() {
+        return ResponseEntity.ok(userService.getMyInfo());
+    }
     
 
     @GetMapping("/Get-all")

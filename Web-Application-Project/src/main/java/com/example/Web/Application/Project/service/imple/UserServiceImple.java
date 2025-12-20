@@ -107,6 +107,19 @@ public class UserServiceImple implements UserService{
         return userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("Email Not Found!!"));
     }
 
+    @Override
+    public Response getMyInfo() {
+        // get the current logged-in entity
+        User user = getLogin();
+
+        UserDTO userDTO = userMapper.mapTo(user);
+
+        return Response.builder()
+                .status(200)
+                .message("User info fetched successfully")
+                .user(userDTO)
+                .build();
+    }
 
    
    

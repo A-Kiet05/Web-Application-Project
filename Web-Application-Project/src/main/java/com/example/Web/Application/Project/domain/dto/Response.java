@@ -66,5 +66,6 @@ public class Response {
    private List<UserStatsDTO> userStatsDTOs;
 
    private QuoteDTO quoteDTO;
+   private List<QuoteDTO> quoteDTOs;
 
 }
