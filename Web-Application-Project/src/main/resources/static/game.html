@@ -435,8 +435,20 @@
       }
 
       function resetGame() {
-        window.location.reload();
-      }
+          // hide the modal and overlay
+        document.getElementById("resultModal").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+
+        // un-blur the background
+        document.getElementById("gameContainer").classList.remove("blur");
+
+        // restart the game logic
+       // reuse changmode cause im lazy
+        changeMode();
+
+        // focus the body so typing works immediately
+        document.body.focus();      }
+
       function logout() {
         localStorage.clear();
         window.location.href = "./login.html";
