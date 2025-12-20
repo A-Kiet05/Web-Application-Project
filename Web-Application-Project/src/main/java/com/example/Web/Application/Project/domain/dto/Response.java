@@ -65,5 +65,6 @@ public class Response {
    private UserStatsDTO userStatsDTO;
    private List<UserStatsDTO> userStatsDTOs;
 
-    
+   private QuoteDTO quoteDTO;
+
 }

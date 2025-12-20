@@ -149,6 +149,11 @@
         </div>
       </header>
 
+      <select id="mode-selector" onchange="changeMode()" style="padding: 5px; background: #0f1724; color: white; border: 1px solid #d40016; border-radius: 4px;">
+        <option value="NORMAL">Time Mode (30s)</option>
+        <option value="QUOTE">Quote Mode</option>
+      </select>
+
       <div class="status">
         <div id="timer">00:30</div>
         <div id="wpm-display">0 WPM</div>
@@ -177,6 +182,9 @@
       let token = localStorage.getItem("jwt_token");
       if (!token) window.location.href = "/login.html";
 
+      let currentMode = "TIME"; // Default mode
+      let quoteSource = "";
+
       let words = [],
         typedText = "";
       let timer = GAME_DURATION,
@@ -196,17 +204,57 @@
       };
 
       async function fetchWords() {
-        try {
-          const res = await fetch(`/words/get-random-word?limit=50`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          const json = await res.json();
-          const list = json?.wordDTOs || json || [];
-          words = list.map((w) => (typeof w === "string" ? w : w.word));
-          renderWords();
-        } catch (err) {
-          container.innerHTML = `<span style="color:red">Server Error</span>`;
-        }
+        // try {
+        //   const res = await fetch(`/words/get-random-word?limit=50`, {
+        //     headers: { Authorization: `Bearer ${token}` },
+        //   });
+        //   const json = await res.json();
+        //   const list = json?.wordDTOs || json || [];
+        //   words = list.map((w) => (typeof w === "string" ? w : w.word));
+        //   renderWords();
+        // } catch (err) {
+        //   container.innerHTML = `<span style="color:red">Server Error</span>`;
+        // }
+
+          container.innerHTML = "Loading...";
+
+          try {
+            let url = "";
+            if (currentMode === "QUOTE") {
+              url = "/quotes/random";
+            } else {
+              url = "/words/get-random-word?limit=50"; // old endpoint
+            }
+
+            const res = await fetch(url, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            const json = await res.json();
+
+
+            if (currentMode === "QUOTE") {
+
+              const content = json.quoteDTO ? json.quoteDTO.content : json.content;
+              quoteSource = json.quoteDTO ? json.quoteDTO.source : json.source;
+
+              //split the sentence into an array of words so the game engine understands it
+              words = content.split(" ");
+
+              // update UI to show the author
+              document.getElementById("wpm-display").innerText = "- " + quoteSource;
+
+            } else {
+              // old logic for TIME mode
+              const list = json?.wordDTOs || json || [];
+              words = list.map((w) => (typeof w === "string" ? w : w.word));
+              document.getElementById("wpm-display").innerText = "0 WPM";
+            }
+
+            renderWords();
+          } catch (err) {
+            console.error(err);
+            container.innerHTML = `<span style="color:red">Server Error</span>`;
+          }
       }
 
       function renderWords() {
@@ -224,6 +272,32 @@
           container.appendChild(wordDiv);
         });
       }
+
+      function changeMode() {
+        const selector = document.getElementById("mode-selector");
+        currentMode = selector.value;
+
+        // reset timer display based on mode
+        if (currentMode === "TIME") {
+          document.getElementById("timer").innerText = "00:30";
+          document.getElementById("timer").style.visibility = "visible";
+        } else {
+          document.getElementById("timer").innerText = "Quote";
+          // document.getElementById("timer").style.visibility = "hidden";
+        }
+
+        // reset game state
+        isRunning = false;
+        clearInterval(timerInterval);
+        timer = GAME_DURATION;
+        typedText = "";
+        currentWordIndex = 0;
+        currentCharIndex = 0;
+
+        // fetch new data
+        fetchWords();
+      }
+
 
       function handleTyping(e) {
         if (e.key === "Tab") {
@@ -321,7 +395,8 @@
           duration: String(GAME_DURATION - timer),
           typedText: typedText.trim(),
           originalText: words.join(" "),
-          mode: "TIME",
+          mode: currentMode,
+
         };
 
         modal.style.display = "block";
