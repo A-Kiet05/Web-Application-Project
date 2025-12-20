@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Session History - Admin</title>
+    <link rel="stylesheet" href="../css/admin-sessions.css">
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <a href="adminDashboard.html" class="back-link"
+            >← Back to Dashboard</a
+          >
+          <h1>User Session History</h1>
+        </div>
+      </header>
+
+      <section class="search-section">
+        <h3>Lookup Sessions by User</h3>
+        <p style="color: var(--muted); font-size: 14px">
+          Enter a User ID to see all game sessions recorded for that specific
+          player.
+        </p>
+        <div class="search-box">
+          <input
+            type="number"
+            id="userIdInput"
+            placeholder="Enter User ID (e.g. 3)"
+          />
+          <button onclick="fetchUserSessions()">Search History</button>
+        </div>
+      </section>
+
+      <div id="resultsArea" class="results-grid">
+        <div class="empty-state">
+          No user selected. Search for a User ID to view their session history.
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/admin-sessions.js">
+     
+    </script>
+  </body>
+</html>

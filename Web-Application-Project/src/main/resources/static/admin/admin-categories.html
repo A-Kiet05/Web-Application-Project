@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Category Management - TypeMaster Admin</title>
+    <link rel="stylesheet" href="../css/admin-categories.css">
+  </head>
+  <body>
+    <div class="container">
+      <a href="adminDashboard.html" class="back-link">← Back to Dashboard</a>
+      <h2>Category Management</h2>
+
+      <div class="dashboard-grid">
+        <aside class="form-section">
+          <h3>New Category</h3>
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" id="catName" placeholder="e.g. Technology" />
+          </div>
+          <div class="input-group">
+            <label>Description</label>
+            <textarea
+              id="catDesc"
+              placeholder="What kind of words belong here?"
+            ></textarea>
+          </div>
+          <button class="btn-primary" onclick="createCategory()">
+            Add Category
+          </button>
+        </aside>
+
+        <main class="list-section">
+          <h3>Active System Categories</h3>
+          <div id="categoryList">
+            <div class="empty-state">Syncing with TypeMaster database...</div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-categories.js">
+    
+    </script>
+  </body>
+</html>

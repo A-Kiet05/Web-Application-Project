@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -27,20 +28,32 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity ) throws Exception{
-        
-        httpSecurity.csrf(AbstractHttpConfigurer::disable)
-         .cors(Customizer.withDefaults())
-         .authorizeHttpRequests(request -> request
-                                  .requestMatchers("/auth/**", "/*.html", "/quotes/**", "/scores/**" , "/words/**" , "/achievement/**" , "/category/**" )
-                                  .permitAll()
-                                  .anyRequest()
-                                  .authenticated())
-         .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        
-         return httpSecurity.build();
-    }
+public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.csrf(AbstractHttpConfigurer::disable)
+        .cors(Customizer.withDefaults())
+        .authorizeHttpRequests(request -> request
+            // 1. IMPORTANT: Allow internal forwards
+            .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+            
+            // 2. Allow the public routes
+            .requestMatchers("/game", "/leaderboard", "/profile","admin", "/").permitAll() 
+            
+            // 3. Allow the physical folders and static assets (CSS/JS/Images)
+            .requestMatchers("/user/**", "/shared/**", "/auth/**", "/static/**","/admin/**", "/css/**", "/js/**").permitAll()
+            
+            // 4. Allow APIs
+            .requestMatchers("/scores/**", "/words/**", "/category/**", "/achievement/**").permitAll()
+            
+            // 5. Secure the admin folder specifically
+            .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
+            
+            .anyRequest().authenticated()
+        )
+        .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return httpSecurity.build();
+}
 
     @Bean
     public PasswordEncoder passwordEncoder(){

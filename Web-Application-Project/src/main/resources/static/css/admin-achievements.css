@@ -1,0 +1,103 @@
+:root {
+            --bg: #071023;
+            --panel: #0b1220;
+            --accent: #06b6d4;
+            --text: #e6eef8;
+            --muted: #94a3b8;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.03);
+        }
+
+        body {
+            background: linear-gradient(180deg, #071023 0%, #071a2b 100%);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .back-link:hover { color: var(--accent); }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--panel);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h2, h3 { margin-top: 0; color: var(--accent); }
+
+        .form-group { margin-bottom: 16px; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--muted); }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            background: #050b18;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input:focus { outline: 1px solid var(--accent); border-color: transparent; }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--accent); color: #071023; }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; padding: 12px; color: var(--muted); border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 13px; }
+        td { padding: 16px 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); font-size: 14px; }
+        
+        .code-badge { background: #1e293b; padding: 4px 8px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+        .condition-badge { color: var(--accent); font-weight: 600; font-size: 12px; }
+
+        .actions { display: flex; gap: 8px; }
+        .btn-icon {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--muted);
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-icon.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+        @media (max-width: 900px) { .admin-grid { grid-template-columns: 1fr; } }

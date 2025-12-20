@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard — TypeMaster</title>
+    <link rel="stylesheet" href="../css/adminDashboard.css">
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div class="brand">
+          <div class="logo">TM</div>
+          <div>
+            <div class="title">TYPE MASTER</div>
+            <div class="subtitle">System Administration Panel</div>
+          </div>
+        </div>
+
+        <div class="top-controls">
+          <div style="text-align: right">
+            <div
+              id="admin-email"
+              style="font-weight: 700; color: var(--accent)"
+            >
+              Loading...
+            </div>
+            <div
+              id="admin-role"
+              class="subtitle"
+              style="text-transform: uppercase"
+            >
+              Administrator
+            </div>
+          </div>
+          <button class="btn" onclick="logout()">Logout</button>
+        </div>
+      </header>
+
+      <section class="main-card">
+        <div
+          style="
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 20px;
+          "
+        >
+          <h2 style="margin: 0; font-size: 1.8rem">System Overview</h2>
+          <p class="subtitle">
+            Central control for platform content, users, and performance
+            analytics.
+          </p>
+        </div>
+
+        <div class="grid">
+          <div class="nav-card">
+            <div>
+              <h3><span>👤</span> User Control</h3>
+              <p>
+                Manage accounts, monitor registrations, and handle
+                administrative permissions.
+              </p>
+            </div>
+            <div class="actions">
+              <a class="action-link" href="/admin/users">
+                <span>User Directory</span><span>&rsaquo;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-card">
+            <div>
+              <h3><span>⌨️</span> Dictionary</h3>
+              <p>
+                Expand the typing library, manage difficulty, and organize word
+                categories.
+              </p>
+            </div>
+            <div class="actions">
+              <a class="action-link" href="/admin/categories">
+                <span>Categories</span><span>&rsaquo;</span>
+              </a>
+              <a class="action-link" href="/admin/words">
+                <span>Word Bank</span><span>&rsaquo;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-card">
+            <div>
+              <h3><span>🏆</span> Rewards</h3>
+              <p>
+                Configure progression milestones and define speed/accuracy
+                requirements.
+              </p>
+            </div>
+            <div class="actions">
+              <a class="action-link" href="/admin/achievements">
+                <span>Manage Achievements</span><span>&rsaquo;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-card">
+            <div>
+              <h3><span>📜</span> Game Logs</h3>
+              <p>
+                Audit individual player sessions to track progress or
+                troubleshoot issues.
+              </p>
+            </div>
+            <div class="actions">
+              <a class="action-link" href="/admin/sessions">
+                <span>View Session History</span><span>&rsaquo;</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="nav-card">
+            <div>
+              <h3><span>📊</span> Analytics</h3>
+              <p>
+                View global leaderboards and high-level platform performance
+                stats.
+              </p>
+            </div>
+            <div class="actions">
+              <a class="action-link" href="/leaderboard">
+                <span>Global Leaderboard</span><span>&rsaquo;</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script src="../js/adminDashboard.js">
+      
+    </script>
+  </body>
+</html>

@@ -21,18 +21,44 @@ public class PageController {
         return "forward:/auth/register.html";
     }
 
-    @GetMapping("/auth/game")
+    @GetMapping("/game")
     public String game() {
-        return "forward:/auth/game.html";
+        return "forward:/game.html";
     }
 
-    @GetMapping("/auth/leaderboard")
+    @GetMapping("/leaderboard")
     public String leaderboard() {
-        return "forward:/auth/leaderboard.html";
+        return "forward:/leaderboard.html";
     }
 
-    @GetMapping("/auth/admin")
+    @GetMapping("/admin")
     public String adminDashboard() {
-        return "forward:/auth/admin/dashboard.html";
+        return "forward:/admin/adminDashboard.html";
+    }
+    
+    @GetMapping("/profile")
+    public String profile() {
+        return "forward:/profile.html";
+    }
+
+    @GetMapping("/admin/users")
+    public String adminUsers() {
+        return "forward:/admin/admin-users.html";
+    }
+    @GetMapping("/admin/categories")
+    public String adminCategories() {
+        return "forward:/admin/admin-categories.html";
+    } 
+    @GetMapping("/admin/words")
+    public String adminWords() {
+    return "forward:/admin/admin-words.html";
+    } 
+    @GetMapping("/admin/achievements")
+    public String adminAchievements() {
+    return "forward:/admin/admin-achievements.html";
+    }
+    @GetMapping("/admin/sessions")
+    public String adminSessions() {
+    return "forward:/admin/admin-sessions.html";
     }
 }

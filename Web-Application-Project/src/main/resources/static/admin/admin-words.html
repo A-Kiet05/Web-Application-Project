@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word Management - TypeMaster Admin</title>
+    <link rel="stylesheet" href="../css/admin-words.css">
+  </head>
+  <body>
+    <div class="container">
+      <a href="adminDashboard.html" class="back-link">← Back to Dashboard</a>
+      <h2>Word Management</h2>
+
+      <div class="admin-grid">
+        <aside class="panel sticky-panel">
+          <h3>Add New Word</h3>
+          <label>Word Content</label>
+          <input type="text" id="wordInput" placeholder="e.g. Algorithm" />
+
+          <label>Category Assignment</label>
+          <select id="categorySelect">
+            <option value="">Syncing categories...</option>
+          </select>
+
+          <button class="btn-add" onclick="createWord()">
+            Add to Database
+          </button>
+        </aside>
+
+        <main class="panel">
+          <div class="search-container">
+            <h3>Global Word Bank</h3>
+            <input
+              type="text"
+              id="searchBar"
+              placeholder="Search dictionary..."
+              onkeyup="filterWords()"
+              style="width: 250px; margin-bottom: 0"
+            />
+          </div>
+
+          <div class="table-wrap">
+            <table id="wordTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Term</th>
+                  <th>Category</th>
+                  <th style="text-align: right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="wordListBody">
+                <tr>
+                  <td
+                    colspan="4"
+                    style="
+                      text-align: center;
+                      color: var(--muted);
+                      padding: 40px;
+                    "
+                  >
+                    Initializing word sync...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <script src="../js/admin-words.js">
+      
+    </script>
+  </body>
+</html>

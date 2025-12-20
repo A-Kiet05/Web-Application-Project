@@ -1,238 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Profile - TypeMaster</title>
-    <style>
-        :root {
-            --bg: #0b1220;
-            --panel: #0f1724;
-            --accent: #d40016;
-            --text: #e6eef8;
-            --muted: #98a0b3;
-            --border: #1e293b;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: "Roboto Mono", monospace;
-            margin: 0;
-            display: flex;
-            min-height: 100vh;
-        }
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 250px;
-            background: var(--panel);
-            padding: 30px 20px;
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-        }
-        .logo { font-size: 24px; color: var(--accent); margin-bottom: 40px; font-weight: bold; }
-        .nav-item {
-            padding: 15px;
-            color: var(--muted);
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            transition: 0.2s;
-            cursor: pointer;
-        }
-        .nav-item:hover, .nav-item.active { background: rgba(212, 0, 22, 0.1); color: var(--text); }
-        .nav-item.active { border-left: 3px solid var(--accent); }
-
-        /* Main Content */
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-        .header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
-        .section-title { font-size: 20px; color: var(--accent); margin-bottom: 20px; }
-
-        /* Profile Card */
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: var(--panel);
-            padding: 30px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-        .avatar {
-            width: 80px; height: 80px;
-            background: var(--accent);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 32px; font-weight: bold; color: white;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .stat-card {
-            background: var(--panel);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-        .stat-value { font-size: 32px; font-weight: bold; color: var(--text); margin: 10px 0; }
-        .stat-label { color: var(--muted); font-size: 14px; }
-
-        /* Achievement Grid */
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-        }
-        .achievement-card {
-            background: var(--panel);
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            opacity: 0.5; /* Dimmed by default */
-        }
-        .achievement-card.unlocked { opacity: 1; border-color: var(--accent); }
-        .badge-icon { font-size: 24px; color: var(--accent); }
-
-    </style>
-</head>
-<body>
-
-<div class="sidebar">
-    <div class="logo">TYPE MASTER</div>
-    <a href="game.html" class="nav-item">Play Game</a>
-    <div class="nav-item active">My Profile</div>
-    <a href="leaderboard.html" class="nav-item">Leaderboard</a>
-    <div style="flex:1"></div>
-    <a href="#" onclick="logout()" class="nav-item" style="color: #ff4961;">Logout</a>
-</div>
-
-<div class="main-content">
-
-    <div class="header">
-        <h1 id="welcome-msg">Welcome back</h1>
+    <link rel="stylesheet" href="./css/profile.css">
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="logo">TYPE MASTER</div>
+      <a href="/game" class="nav-item">Play Game</a>
+      <div class="nav-item active">My Profile</div>
+      <a href="/leaderboard" class="nav-item">Leaderboard</a>
+      <div style="flex: 1"></div>
+      <a href="#" onclick="logout()" class="nav-item" style="color: #ff4961"
+        >Logout</a
+      >
     </div>
 
-    <div class="profile-header">
+    <div class="main-content">
+      <div class="header">
+        <h1 id="welcome-msg">Welcome back</h1>
+      </div>
+
+      <div class="profile-header">
         <div class="avatar" id="avatar-initial">U</div>
         <div>
-            <h2 id="full-name" style="margin:0">Loading...</h2>
-            <p id="email-display" style="color: var(--muted); margin: 5px 0 0 0">...</p>
-            <span id="role-badge" style="background: #1e293b; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-top: 10px; display:inline-block">USER</span>
+          <h2 id="full-name" style="margin: 0">Loading...</h2>
+          <p id="email-display" style="color: var(--muted); margin: 5px 0 0 0">
+            ...
+          </p>
+          <span
+            id="role-badge"
+            style="
+              background: #1e293b;
+              padding: 4px 8px;
+              border-radius: 4px;
+              font-size: 12px;
+              margin-top: 10px;
+              display: inline-block;
+            "
+            >USER</span
+          >
         </div>
-    </div>
+      </div>
 
-    <br><br>
+      <br /><br />
 
-    <div class="section-title">Career Statistics</div>
-    <div class="stats-grid" id="stats-container">
+      <div class="section-title">Career Statistics</div>
+      <div class="stats-grid" id="stats-container">
         <div class="stat-card">
-            <div class="stat-label">Best WPM</div>
-            <div class="stat-value" id="stat-wpm">0</div>
+          <div class="stat-label">Best WPM</div>
+          <div class="stat-value" id="stat-wpm">0</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Avg Accuracy</div>
-            <div class="stat-value" id="stat-acc">0%</div>
+          <div class="stat-label">Avg Accuracy</div>
+          <div class="stat-value" id="stat-acc">0%</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Total Words</div>
-            <div class="stat-value" id="stat-words">0</div>
+          <div class="stat-label">Total Words</div>
+          <div class="stat-value" id="stat-words">0</div>
         </div>
-    </div>
+      </div>
 
-    <div class="section-title">Achievements</div>
-    <div class="achievements-grid" id="achievements-container">
+      <div class="section-title">Achievements</div>
+      <div class="achievements-grid" id="achievements-container">
         <p style="color: var(--muted)">Loading achievements...</p>
+      </div>
     </div>
 
-</div>
-
-<script>
-    const token = localStorage.getItem("jwt_token");
-    if (!token) window.location.href = "/login.html";
-
-    const headers = { "Authorization": `Bearer ${token}` };
-
-    window.onload = () => {
-        loadBasicInfo();
-        loadStats();
-        loadAchievements();
-    };
-
-    // 1. Load User Info
-    async function loadBasicInfo() {
-        try {
-            const res = await fetch('/user/my-info', { headers });
-            const data = await res.json();
-            if(data.status === 200) {
-                const user = data.user;
-                document.getElementById('full-name').innerText = user.fullName || user.username;
-                document.getElementById('email-display').innerText = user.email;
-                document.getElementById('role-badge').innerText = user.role;
-                document.getElementById('avatar-initial').innerText = (user.fullName || user.username).charAt(0).toUpperCase();
-            }
-        } catch (err) { console.error("Info Load Error", err); }
-    }
-
-    // 2. Load Stats
-    async function loadStats() {
-        try {
-            const res = await fetch('/user-stats/get-own-stats', { headers });
-            const data = await res.json();
-            // Check if userStats exists in the response wrapper
-            const stats = data.userStats || data.userStatsDTO;
-
-            if (stats) {
-                document.getElementById('stat-wpm').innerText = stats.bestWpm || 0;
-                document.getElementById('stat-acc').innerText = (stats.averageAccuracy || 0) + '%';
-                document.getElementById('stat-words').innerText = stats.totalWordsTyped || 0;
-            }
-        } catch (err) { console.error("Stats Load Error", err); }
-    }
-
-    // 3. Load Achievements
-    async function loadAchievements() {
-        try {
-            const res = await fetch('/user-achievement/get-own-achievement', { headers });
-            const data = await res.json();
-            const list = data.userAchievementResponses || []; // Adjust based on your Response DTO
-
-            const container = document.getElementById('achievements-container');
-            container.innerHTML = "";
-
-            if(list.length === 0) {
-                container.innerHTML = "<p style='color:var(--muted)'>No achievements unlocked yet.</p>";
-                return;
-            }
-
-            list.forEach(item => {
-                const div = document.createElement("div");
-                div.className = "achievement-card unlocked";
-                div.innerHTML = `
-                        <div class="badge-icon">🏆</div>
-                        <div>
-                            <div style="font-weight:bold">Achievement #${item.achievementId}</div>
-                            <div style="font-size:12px; color:var(--muted)">Unlocked: ${new Date(item.unlockedAt).toLocaleDateString()}</div>
-                        </div>
-                    `;
-                container.appendChild(div);
-            });
-
-        } catch (err) { console.error("Achievement Load Error", err); }
-    }
-
-    function logout() {
-        localStorage.clear();
-        window.location.href = "/login.html";
-    }
-</script>
-</body>
+    <script src="./js/profile.js">
+    
+    </script>
+  </body>
 </html>
