@@ -5,7 +5,8 @@ const headers = { Authorization: `Bearer ${token}` };
 
 window.onload = () => {
   loadBasicInfo();
-  loadStats();
+  loadStats()
+  loadWrongWords();
   loadAchievements();
 };
 
@@ -93,4 +94,80 @@ async function loadAchievements() {
 function logout() {
   localStorage.clear();
   window.location.href = "/";
+}
+
+// 4. Loads wrong words
+async function loadWrongWords() {
+  const container = document.getElementById("wrong-words-container");
+  try {
+    const userId = localStorage.getItem("user_id");
+    // ensure UserWordController endpoint is open
+    const res = await fetch(`/user-words/get-wrong-words-by-user/${userId}`, { headers });
+    const data = await res.json();
+
+    const list = data.userWordDTOs || data || [];
+
+    if (list.length === 0) {
+      container.innerHTML = "<p style='color:var(--muted)'>No wrong words found. Good job!</p>";
+      return;
+    }
+
+    // Save to localStorage for Practice Mode
+    const practiceList = list.map(item => ({
+      word: item.word || item.wordContent,
+      id: item.wordId
+    }));
+    localStorage.setItem("practice_words", JSON.stringify(practiceList));
+
+    // render table
+    let html = `
+    <table style="width:100%; text-align:left; color:white;">
+        <thead>
+            <tr style="border-bottom:1px solid #333;">
+                <th>Word</th>
+                <th>Mistakes</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>`;
+
+    list.forEach(item => {
+      html += `
+            <tr id="row-${item.id}">
+                <td style="padding:8px; color:#ff4961;">${item.word || item.wordContent}</td>
+                <td style="padding:8px;">${item.count}</td>
+                <td style="padding:8px;">
+                    <button onclick="deleteWrongWord(${item.id})" style="background:transparent; border:1px solid #ff4961; color:#ff4961; padding:2px 8px; cursor:pointer;">Delete</button>
+                </td>
+            </tr>`;
+    });
+
+    html += `</tbody></table>
+    <div style="margin-top:15px;">
+        <button onclick="startPractice()" style="background:#ff4961; color:white; padding:10px 20px; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">
+           Practice Weak Words
+        </button>
+    </div>`;
+
+    container.innerHTML = html;
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>Error loading words.</p>";
+  }
+}
+
+async function deleteWrongWord(id) {
+  if (!confirm("Remove this word?")) return;
+  try {
+    await fetch(`/user-words/delete-wrong-word/${id}`, { method: "DELETE", headers });
+    document.getElementById(`row-${id}`).remove();
+  } catch (err) {
+    alert("Failed to delete.");
+  }
+}
+
+function startPractice() {
+  localStorage.setItem("preferredMode", "PRACTICE_WRONG");
+  window.location.href = "/game";
 }

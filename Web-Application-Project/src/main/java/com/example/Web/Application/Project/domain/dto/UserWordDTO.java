@@ -20,10 +20,10 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserWordDTO {
     
-
-    
         private Long id;
         private Long userId;
         private Long wordId;
-       
+
+        private String word;
+        private Integer count;
 }

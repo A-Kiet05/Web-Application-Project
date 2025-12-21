@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface UserWordRepository extends JpaRepository<UserWord, Long> {
     
   Optional<UserWord> findByUserIdAndWordId(Long userId, Long wordId);
+
   List<UserWord> findByUserId(Long userId);
   List<UserWord> findAllByUserId(Long userId);
 }

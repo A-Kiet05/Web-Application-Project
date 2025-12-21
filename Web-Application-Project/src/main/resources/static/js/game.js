@@ -7,6 +7,8 @@ let quoteSource = "";
 
 let words = [],
   typedText = "";
+let wordObjects = [];
+
 let timer = GAME_DURATION,
   isRunning = false,
   timerInterval = null;
@@ -39,6 +41,34 @@ async function fetchWords() {
 
   container.innerHTML = "Loading...";
 
+  // practice mode logic
+  if (currentMode === "PRACTICE_WRONG") {
+    const stored = localStorage.getItem("practice_words");
+    if (stored) {
+      const pool = JSON.parse(stored).filter(w => w && w.word);
+
+      if (pool.length === 0) {
+        alert("No wrong words to practice!");
+        switchMode("TIME");
+        return;
+      }
+
+      //generate 50 random words from the pool (allows repetition)
+      const practiceSet = [];
+      for (let i = 0; i < 1000; i++) {
+        const randomItem = pool[Math.floor(Math.random() * pool.length)];
+        practiceSet.push(randomItem);
+      }
+
+      wordObjects = practiceSet;
+      words = practiceSet.map(w => w.word);
+
+      document.getElementById("wpm-display").innerText = "Practice Mode (Infinite)";
+      renderWords();
+      return;
+    }
+  }
+
   try {
     let url = "";
     if (currentMode === "QUOTE") {
@@ -64,6 +94,7 @@ async function fetchWords() {
     } else {
       // old logic for TIME mode
       const list = json?.wordDTOs || json || [];
+      wordObjects = list;
       words = list.map((w) => (typeof w === "string" ? w : w.word));
       // clear author display
       document.getElementById("wpm-display").innerText = "";
@@ -139,7 +170,58 @@ function updateButtonStyles() {
   }
 }
 
-  function handleTyping(e) {
+function checkWordAndSave(index) {
+  const wordDiv = document.querySelectorAll(".word")[index];
+  if (!wordDiv) return;
+
+  const letters = wordDiv.querySelectorAll(".letter");
+  let isWrong = false;
+
+  for (let i = 0; i < letters.length; i++) {
+    if (letters[i].classList.contains("wrong")) {
+      isWrong = true;
+      break;
+    }
+  }
+
+  let correctCount = 0;
+  letters.forEach(l => {
+    if (l.classList.contains("correct")) correctCount++;
+  });
+
+  if (correctCount < words[index].length) {
+    isWrong = true;
+  }
+
+  if (isWrong) {
+    saveWrongWord(index);
+  }
+}
+
+async function saveWrongWord(wordIndex) {
+  const userId = localStorage.getItem("user_id");
+  const wordObj = wordObjects[wordIndex];
+
+  if (!userId || !wordObj || !wordObj.id) return;
+
+  //call api to save the wrong words
+  try {
+    const url = `/user-words/create-wrong-word?userId=${userId}&wordId=${wordObj.id}`;
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    console.log(`Saved wrong word ID: ${wordObj.id}`);
+  } catch (e) {
+    console.error("Failed to save wrong word", e);
+  }
+}
+
+function handleTyping(e) {
     if (e.key === "Tab") {
       e.preventDefault();
       resetGame();
@@ -175,10 +257,24 @@ function updateButtonStyles() {
 
     if (e.key === " ") {
       e.preventDefault();
+      checkWordAndSave(currentWordIndex);
       typedText += " ";
       currentWordIndex++;
       currentCharIndex = 0;
-      if (currentWordIndex >= words.length) finishGame();
+
+      if (currentWordIndex >= words.length) {
+        if (currentMode === "PRACTICE_WRONG") {
+          // Reset indices
+          currentWordIndex = 0;
+          currentCharIndex = 0;
+          typedText = ""; // clear typed history to save memory
+
+          fetchWords();
+          return;
+        } else {
+          finishGame();
+        }
+      }
       updateCursor();
       return;
     }
@@ -209,6 +305,9 @@ function updateButtonStyles() {
   }
 
   function startTimer() {
+
+    if (currentMode === "PRACTICE_WRONG" || "QUOTE") return;
+
     timerInterval = setInterval(() => {
       timer--;
       timerEl.innerText = timer;

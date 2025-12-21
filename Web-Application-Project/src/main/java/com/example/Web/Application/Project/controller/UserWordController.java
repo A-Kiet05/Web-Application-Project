@@ -31,7 +31,6 @@ public class UserWordController {
         }
     
     @GetMapping("/get-wrong-words-by-user/{id}")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<Response> getByUserId(@PathVariable Long id){
 
         return ResponseEntity.ok(wrongWordService.getWrongWords(id));
