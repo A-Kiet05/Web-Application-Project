@@ -42,18 +42,17 @@ public class GameSessionServiceImple implements GameSessionService {
         User user = userRepository.findById(sessionRequest.getUserId())
                 .orElseThrow(() -> new NotFoundException("User not found!"));
 
-         //===== Auto save score ==========
-         
-         scoreService.postScore(user.getEmail(), sessionRequest.getTypedText(), sessionRequest.getOriginalText());
+        // Handle Null Strings (Prevent NullPointerException)
+        String typed = sessionRequest.getTypedText() != null ? sessionRequest.getTypedText().trim() : "";
+        String original = sessionRequest.getOriginalText() != null ? sessionRequest.getOriginalText().trim() : "";
 
-         //===================
-        
-                // ========== MONKEYTYPE AUTO CALCULATION ==========
-        String typed = sessionRequest.getTypedText().trim();
-        String original = sessionRequest.getOriginalText().trim();
+        //===== Auto save score ==========
+        scoreService.postScore(user.getEmail(), typed, original);
 
-        String[] typedArr = typed.split("\\s+");
-        String[] originalArr = original.split("\\s+");
+
+        // ========== MONKEYTYPE AUTO CALCULATION ==========
+        String[] typedArr = typed.isEmpty() ? new String[0] : typed.split("\\s+");
+        String[] originalArr = original.isEmpty() ? new String[0] : original.split("\\s+");
 
         int wordsTyped = typedArr.length;
 
@@ -68,35 +67,43 @@ public class GameSessionServiceImple implements GameSessionService {
             }
         }
 
+        // Calculate Accuracy (handle 0 words typed)
         double accuracy = wordsTyped == 0 ? 0 : ((double) correct / wordsTyped) * 100.0;
 
+        // fix divide by zero bug
         double durationSeconds = sessionRequest.getDuration();
+        if (durationSeconds <= 1) {
+            durationSeconds = 1; // default to 1 second if 0 to prevent Infinity
+        }
+
         double durationMinutes = durationSeconds / 60.0;
 
         double rawWpm = wordsTyped / durationMinutes;
         double wpm = correct / durationMinutes;
 
-        //=================================
 
         GameSession session = new GameSession();
         session.setUser(user);
         session.setCorrectWords(correct);
         session.setIncorrectWords(incorrect);
         session.setWordsTyped(wordsTyped);
-        session.setDuration(sessionRequest.getDuration());
+        session.setDuration((int) Math.ceil(durationSeconds)); // Save the safe duration
         session.setRawWpm(rawWpm);
         session.setWpm(wpm);
         session.setAccuracy(accuracy);
+
+        // Ensure Mode is not null (defaults to TIME if missing, or handle in entity)
         session.setMode(sessionRequest.getMode());
-        
-       // save session
+
+        // save session
         sessionRepository.save(session);
-        // trigger if that user unlock new achievement 
+
+        // trigger achievement check
         achievementEvaluatorService.evaluateAchievementsForUser(user, accuracy, wpm);
 
         return Response.builder()
                 .status(200)
-                .message("Session Saved! And Achievement Evaluated !")
+                .message("Session Saved Successfully!")
                 .build();
     }
 

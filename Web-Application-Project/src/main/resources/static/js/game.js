@@ -15,6 +15,8 @@ let timer = GAME_DURATION,
 let currentWordIndex = 0,
   currentCharIndex = 0;
 
+let startTime = 0;
+
 const container = document.getElementById("words-container");
 const timerEl = document.getElementById("timer");
 const modal = document.getElementById("resultModal");
@@ -53,7 +55,7 @@ async function fetchWords() {
         return;
       }
 
-      //generate 50 random words from the pool (allows repetition)
+      //generate random words from the pool (allows repetition)
       const practiceSet = [];
       for (let i = 0; i < 30; i++) {
         const randomItem = pool[Math.floor(Math.random() * pool.length)];
@@ -63,7 +65,8 @@ async function fetchWords() {
       wordObjects = practiceSet;
       words = practiceSet.map(w => w.word);
 
-      document.getElementById("wpm-display").innerText = "Practice Mode (Infinite)";
+      document.getElementById("wpm-display").innerText = "Practice Mode";
+      updateButtonStyles();
       renderWords();
       return;
     }
@@ -164,6 +167,9 @@ function updateButtonStyles() {
   if (currentMode === "QUOTE") {
     timerEl.innerText = "QUOTE";
     timerEl.style.fontSize = "1.5rem";
+  } else if (currentMode === "PRACTICE_WRONG") {
+    timerEl.innerText = "∞";
+    timerEl.style.fontSize = "2rem";
   } else {
     timerEl.innerText = GAME_DURATION;
     timerEl.style.fontSize = "2rem";
@@ -235,6 +241,7 @@ function handleTyping(e) {
 
     if (!isRunning) {
       isRunning = true;
+      startTime = Date.now();
       startTimer();
     }
 
@@ -306,7 +313,7 @@ function handleTyping(e) {
 
   function startTimer() {
 
-    if (currentMode === "PRACTICE_WRONG" || "QUOTE") return;
+    if (currentMode === "PRACTICE_WRONG" || currentMode === "QUOTE") return;
 
     timerInterval = setInterval(() => {
       timer--;
@@ -324,10 +331,12 @@ function handleTyping(e) {
     clearInterval(timerInterval);
     isRunning = false;
 
+    const timeSpentSeconds = (Date.now() - startTime) / 1000;
+
     const userId = localStorage.getItem("user_id");
     const payload = {
       userId: String(userId),
-      duration: String(GAME_DURATION - timer),
+      duration: String(timeSpentSeconds),
       typedText: typedText.trim(),
       originalText: words.join(" "),
       mode: currentMode,
@@ -394,6 +403,8 @@ function handleTyping(e) {
     typedText = "";
     currentWordIndex = 0;
     currentCharIndex = 0;
+
+    updateButtonStyles();
 
     // reset timer based on current mode
     const timerEl = document.getElementById("timer");

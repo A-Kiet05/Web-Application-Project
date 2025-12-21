@@ -22,7 +22,7 @@ import lombok.Setter;
 public class SessionRequest {
     
         private Long userId;
-        private int duration;
+        private double duration;
         private String typedText;
         private String originalText;
         private Mode mode;
