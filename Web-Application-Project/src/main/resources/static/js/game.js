@@ -55,7 +55,7 @@ async function fetchWords() {
 
       //generate 50 random words from the pool (allows repetition)
       const practiceSet = [];
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 30; i++) {
         const randomItem = pool[Math.floor(Math.random() * pool.length)];
         practiceSet.push(randomItem);
       }

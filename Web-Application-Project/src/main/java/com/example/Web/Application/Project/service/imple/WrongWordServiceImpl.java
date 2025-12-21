@@ -65,8 +65,9 @@ public class WrongWordServiceImpl implements WrongWordService {
 
     @Override
     public Response getWrongWords(Long userId) {
-        
-        List<UserWord> userWords = wrongWordRepository.findByUserId(userId);
+
+//        List<UserWord> userWords = wrongWordRepository.findByUserId(userId);
+        List<UserWord> userWords = wrongWordRepository.findByUserIdOrderByErrorCountDesc(userId);
         List<UserWordDTO> userWordDTOs= userWords.stream().map(wrongMapper::mapTo).collect(Collectors.toList());
       
 

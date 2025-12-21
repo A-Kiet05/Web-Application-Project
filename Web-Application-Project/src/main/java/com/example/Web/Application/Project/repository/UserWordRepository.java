@@ -12,6 +12,7 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long> {
     
   Optional<UserWord> findByUserIdAndWordId(Long userId, Long wordId);
 
+  List<UserWord> findByUserIdOrderByErrorCountDesc(Long userId);
   List<UserWord> findByUserId(Long userId);
   List<UserWord> findAllByUserId(Long userId);
 }
