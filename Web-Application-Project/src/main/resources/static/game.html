@@ -17,10 +17,10 @@
         </div>
       </header>
 
-      <select id="mode-selector" onchange="changeMode()" style="padding: 5px; background: #0f1724; color: #ccb8b8; border: 1px solid #d40016; border-radius: 4px;">
-        <option value="NORMAL">Time Mode (30s)</option>
-        <option value="QUOTE">Quote Mode</option>
-      </select>
+      <div class="mode-switcher">
+        <button class="mode-btn active" id="btn-time" onclick="switchMode('TIME')">Time Mode</button>
+        <button class="mode-btn" id="btn-quote" onclick="switchMode('QUOTE')">Quote Mode</button>
+      </div>
 
       <div class="status">
         <div id="timer">00:30</div>

@@ -130,3 +130,31 @@
         filter: blur(4px);
         pointer-events: none;
       }
+
+/* NEW MODE BUTTONS */
+
+.mode-switcher {
+    display: inline-flex;
+    background: var(--panel);
+    padding: 5px;
+    border-radius: 8px;
+    border: 1px solid #1e293b;
+    margin-bottom: 25px;
+}
+.mode-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    padding: 8px 24px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+.mode-btn:hover { color: var(--text); }
+.mode-btn.active {
+    background: var(--accent);
+    color: white;
+    font-weight: bold;
+}
