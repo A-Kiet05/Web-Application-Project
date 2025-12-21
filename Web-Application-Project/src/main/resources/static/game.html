@@ -137,6 +137,35 @@
         filter: blur(4px);
         pointer-events: none;
       }
+
+      /* NEW MODE BUTTONS */
+
+      .mode-switcher {
+        display: inline-flex;
+        background: var(--panel);
+        padding: 5px;
+        border-radius: 8px;
+        border: 1px solid #1e293b;
+        margin-bottom: 25px;
+      }
+      .mode-btn {
+        background: transparent;
+        border: none;
+        color: var(--muted);
+        padding: 8px 24px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 14px;
+        border-radius: 6px;
+        transition: 0.2s;
+      }
+      .mode-btn:hover { color: var(--text); }
+      .mode-btn.active {
+        background: var(--accent);
+        color: white;
+        font-weight: bold;
+      }
+
     </style>
   </head>
   <body>
@@ -150,10 +179,10 @@
         </div>
       </header>
 
-      <select id="mode-selector" onchange="changeMode()" style="padding: 5px; background: #0f1724; color: #ccb8b8; border: 1px solid #d40016; border-radius: 4px;">
-        <option value="NORMAL">Time Mode (30s)</option>
-        <option value="QUOTE">Quote Mode</option>
-      </select>
+      <div class="mode-switcher">
+        <button class="mode-btn active" id="btn-time" onclick="switchMode('TIME')">Time Mode</button>
+        <button class="mode-btn" id="btn-quote" onclick="switchMode('QUOTE')">Quote Mode</button>
+      </div>
 
       <div class="status">
         <div id="timer">00:30</div>
@@ -183,7 +212,7 @@
       let token = localStorage.getItem("jwt_token");
       if (!token) window.location.href = "/login.html";
 
-      let currentMode = "TIME"; // Default mode
+      let currentMode = localStorage.getItem("preferredMode") || "TIME";
       let quoteSource = "";
 
       let words = [],
@@ -200,6 +229,7 @@
       const overlay = document.getElementById("overlay");
 
       window.onload = () => {
+        updateButtonStyles();
         fetchWords();
         document.addEventListener("keydown", handleTyping);
       };
@@ -217,45 +247,47 @@
         //   container.innerHTML = `<span style="color:red">Server Error</span>`;
         // }
 
-          container.innerHTML = "Loading...";
-
-          try {
-            let url = "";
-            if (currentMode === "QUOTE") {
-              url = "/quotes/random";
-            } else {
-              url = "/words/get-random-word?limit=50"; // old endpoint
-            }
-
-            const res = await fetch(url, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            const json = await res.json();
-
-
-            if (currentMode === "QUOTE") {
-
-              const content = json.quoteDTO ? json.quoteDTO.content : json.content;
-              quoteSource = json.quoteDTO ? json.quoteDTO.source : json.source;
-
-              //split the sentence into an array of words so the game engine understands it
-              words = content.split(" ");
-
-              // update UI to show the author
-              document.getElementById("wpm-display").innerText = "- " + quoteSource;
-
-            } else {
-              // old logic for TIME mode
-              const list = json?.wordDTOs || json || [];
-              words = list.map((w) => (typeof w === "string" ? w : w.word));
-              document.getElementById("wpm-display").innerText = "0 WPM";
-            }
-
-            renderWords();
-          } catch (err) {
-            console.error(err);
-            container.innerHTML = `<span style="color:red">Server Error</span>`;
+        container.innerHTML = "Loading...";
+        try {
+          let url = "";
+          if (currentMode === "QUOTE") {
+            url = "/quotes/random"; // Quote Mode URL
+          } else {
+            url = "/words/get-random-word?limit=50"; // Time Mode URL
           }
+
+          const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+          const json = await res.json();
+
+          if (currentMode === "QUOTE") {
+            const data = json.quoteDTO;
+
+            if (!data) {
+              container.innerHTML = "Error: No quote data found.";
+              return;
+            }
+
+            quoteSource = data.source;
+            let content = data.content.trim();
+            words = content.split(" "); // split sentence to array of words
+
+            // show author name
+            document.getElementById("wpm-display").innerText = "- " + quoteSource;
+
+          } else {
+            const list = json.wordDTOs || json || [];
+            words = list.map(w => typeof w === "string" ? w : w.word);
+
+            // clear author display
+            document.getElementById("wpm-display").innerText = "";
+          }
+
+          renderWords();
+        } catch (err) {
+          console.error(err);
+          container.innerHTML = `<span style="color:red">Server Error</span>`;
+        }
+
       }
 
       function renderWords() {
@@ -274,29 +306,51 @@
         });
       }
 
-      function changeMode() {
-        const selector = document.getElementById("mode-selector");
-        currentMode = selector.value;
+      // function changeMode() {
+      //   const selector = document.getElementById("mode-selector");
+      //   currentMode = selector.value;
+      //
+      //   // reset timer display based on mode
+      //   if (currentMode === "TIME") {
+      //     document.getElementById("timer").innerText = "00:30";
+      //     document.getElementById("timer").style.visibility = "visible";
+      //   } else {
+      //     document.getElementById("timer").innerText = "Quote";
+      //     // document.getElementById("timer").style.visibility = "hidden";
+      //   }
+      //
+      //   // reset game state
+      //   isRunning = false;
+      //   clearInterval(timerInterval);
+      //   timer = GAME_DURATION;
+      //   typedText = "";
+      //   currentWordIndex = 0;
+      //   currentCharIndex = 0;
+      //
+      //   // fetch new data
+      //   fetchWords();
+      // }
 
-        // reset timer display based on mode
-        if (currentMode === "TIME") {
-          document.getElementById("timer").innerText = "00:30";
-          document.getElementById("timer").style.visibility = "visible";
+      function switchMode(mode) {
+        if(mode === currentMode) return;
+        currentMode = mode;
+        localStorage.setItem("preferredMode", mode);
+        updateButtonStyles();
+        resetGame();
+      }
+
+      function updateButtonStyles() {
+        document.getElementById("btn-time").className = currentMode === 'TIME' ? 'mode-btn active' : 'mode-btn';
+        document.getElementById("btn-quote").className = currentMode === 'QUOTE' ? 'mode-btn active' : 'mode-btn';
+
+        const timerEl = document.getElementById("timer");
+        if (currentMode === "QUOTE") {
+          timerEl.innerText = "QUOTE";
+          timerEl.style.fontSize = "1.5rem";
         } else {
-          document.getElementById("timer").innerText = "Quote";
-          // document.getElementById("timer").style.visibility = "hidden";
+          timerEl.innerText = GAME_DURATION;
+          timerEl.style.fontSize = "2rem";
         }
-
-        // reset game state
-        isRunning = false;
-        clearInterval(timerInterval);
-        timer = GAME_DURATION;
-        typedText = "";
-        currentWordIndex = 0;
-        currentCharIndex = 0;
-
-        // fetch new data
-        fetchWords();
       }
 
 
@@ -436,27 +490,56 @@
       }
 
       function resetGame() {
-          // hide the modal and overlay
-        document.getElementById("resultModal").style.display = "none";
-        document.getElementById("overlay").style.display = "none";
+        //    // hide the modal and overlay
+        //  document.getElementById("resultModal").style.display = "none";
+        //  document.getElementById("overlay").style.display = "none";
+        //
+        //  // un-blur the background
+        //  document.getElementById("gameContainer").classList.remove("blur");
+        //
+        //  // restart the game logic
+        // // reuse changmode cause im lazy
+        //  changeMode();
+        //
+        //  // focus the body so typing works immediately
+        //  document.body.focus();      }
 
-        // un-blur the background
-        document.getElementById("gameContainer").classList.remove("blur");
+          document.getElementById("resultModal").style.display = "none";
+          document.getElementById("overlay").style.display = "none";
+          document.getElementById("gameContainer").classList.remove("blur");
 
-        // restart the game logic
-       // reuse changmode cause im lazy
-        changeMode();
+          // reset Game State
+          isRunning = false;
+          clearInterval(timerInterval);
+          timer = GAME_DURATION;
+          typedText = "";
+          currentWordIndex = 0;
+          currentCharIndex = 0;
 
-        // focus the body so typing works immediately
-        document.body.focus();      }
+          // reset timer based on current mode
+          const timerEl = document.getElementById("timer");
+          if (currentMode === "QUOTE") {
+            timerEl.innerText = "QUOTE";
+          } else {
+            timerEl.innerText = GAME_DURATION; // Reset to 30
+          }
+
+          // fetch
+          fetchWords();
+
+          // focus input
+          document.body.focus();
+      }
 
       function logout() {
-        localStorage.clear();
-        window.location.href = "./login.html";
+          localStorage.clear();
+          window.location.href = "./login.html";
       }
+
       function focusInput() {
-        /* focus helper */
+          document.body.focus();
       }
+
     </script>
   </body>
 </html>
