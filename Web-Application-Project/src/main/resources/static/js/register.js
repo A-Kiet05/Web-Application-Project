@@ -22,7 +22,7 @@ document
         return;
       }
       alert("Registration successful — please login");
-      window.location.href = "/login";
+      window.location.href = "/";
     } catch (err) {
       console.error(err);
       alert("Server error");

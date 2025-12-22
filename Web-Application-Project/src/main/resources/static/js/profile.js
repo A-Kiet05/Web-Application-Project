@@ -34,21 +34,44 @@ async function loadBasicInfo() {
 
 // 2. Load Stats
 async function loadStats() {
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
+
   try {
-    const res = await fetch("/user-stats/get-own-stats", { headers });
-    const data = await res.json();
-    // Check if userStats exists in the response wrapper
+    let res = await fetch(`/user-stats/get-own-stats`, { headers });
+    let data = await res.json();
+
+    if (res.status === 200 && data.userStatsDTO) {
+      const statsId = data.userStatsDTO.id;
+      await fetch(`/user-stats/update-stats/${statsId}`, {
+        method: "PUT",
+        headers: headers,
+      });
+    } else if (res.status === 404 || data.status === 404) {
+      const userEmail = localStorage.getItem("user_email");
+      await fetch(`/user-stats/create-user-stats`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ email: userEmail }),
+      });
+    }
+
+    res = await fetch(`/user-stats/get-own-stats`, { headers });
+    data = await res.json();
+
     const stats = data.userStats || data.userStatsDTO;
 
     if (stats) {
       document.getElementById("stat-wpm").innerText = stats.bestWpm || 0;
       document.getElementById("stat-acc").innerText =
-        (stats.averageAccuracy || 0) + "%";
+        (stats.averageAccuracy ? Math.round(stats.averageAccuracy) : 0) + "%";
       document.getElementById("stat-words").innerText =
         stats.totalWordsTyped || 0;
     }
   } catch (err) {
-    console.error("Stats Load Error", err);
+    console.error("Stats Load Error:", err);
   }
 }
 
